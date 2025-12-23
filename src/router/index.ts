@@ -4,45 +4,56 @@ const routes = [
   {
     path: '/',
     name: 'Home',
-    component: () => import('../views/Home.vue')
+    component: () => import(/* webpackChunkName: "home" */ '../views/Home.vue')
   },
   {
     path: '/blog',
     name: 'Blog',
-    component: () => import('../views/Blog.vue')
+    component: () => import(/* webpackChunkName: "blog" */ '../views/Blog.vue')
   },
   {
     path: '/blog/:slug',
     name: 'BlogPost',
-    component: () => import('../views/BlogPost.vue')
+    component: () => import(/* webpackChunkName: "blog-post" */ '../views/BlogPost.vue')
   },
   {
     path: '/categories',
     name: 'Categories',
-    component: () => import('../views/Categories.vue')
+    component: () => import(/* webpackChunkName: "categories" */ '../views/Categories.vue')
   },
   {
     path: '/categories/:category',
     name: 'CategoryPosts',
-    component: () => import('../views/CategoryPosts.vue')
+    component: () => import(/* webpackChunkName: "category-posts" */ '../views/CategoryPosts.vue')
   },
   {
     path: '/about',
     name: 'About',
-    component: () => import('../views/About.vue')
+    component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
   },
   {
     path: '/contact',
     name: 'Contact',
-    component: () => import('../views/Contact.vue')
+    component: () => import(/* webpackChunkName: "contact" */ '../views/Contact.vue')
+  },
+  {
+    path: '/:pathMatch(.*)*',
+    name: 'NotFound',
+    component: () => import(/* webpackChunkName: "not-found" */ '../views/NotFound.vue')
   }
 ]
 
 const router = createRouter({
   history: createWebHistory(),
   routes,
-  scrollBehavior() {
-    return { top: 0 }
+  scrollBehavior(to, _from, savedPosition) {
+    if (savedPosition) {
+      return savedPosition
+    }
+    if (to.hash) {
+      return { el: to.hash, behavior: 'smooth' }
+    }
+    return { top: 0, behavior: 'smooth' }
   }
 })
 

@@ -3,6 +3,7 @@ import { computed } from 'vue'
 import { RouterLink } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import type { Post } from '../../data/posts'
+import { formatChinaDate } from '../../data/posts'
 
 const props = defineProps<{
   post: Post
@@ -19,11 +20,7 @@ const excerpt = computed(() => {
 })
 
 const formattedDate = computed(() => {
-  return new Date(props.post.date).toLocaleDateString(locale.value === 'zh' ? 'zh-CN' : 'en-US', {
-    year: 'numeric',
-    month: 'short',
-    day: 'numeric'
-  })
+  return formatChinaDate(props.post.createdAt, locale.value)
 })
 </script>
 

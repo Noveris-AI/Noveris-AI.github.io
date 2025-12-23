@@ -2,10 +2,13 @@
 import { computed, ref, watch, onMounted } from 'vue'
 import { useRoute, RouterLink } from 'vue-router'
 import { useI18n } from 'vue-i18n'
+import { useHead } from '@vueuse/head'
 import { marked } from 'marked'
 import DefaultLayout from '../layouts/DefaultLayout.vue'
-import { posts } from '../data/posts'
+import { posts, formatChinaDate } from '../data/posts'
 import { useTranslation, isChinese } from '../composables/useTranslation'
+import Comments from '../components/blog/Comments.vue'
+import Appreciation from '../components/blog/Appreciation.vue'
 
 const route = useRoute()
 const { locale, t } = useI18n()
@@ -29,6 +32,23 @@ const title = computed(() => {
 })
 
 const translatedTitle = ref<string | null>(null)
+
+// SEO Meta Tags - Dynamic based on post
+useHead({
+  title: computed(() => post.value ? `${locale.value === 'zh' ? post.value.titleZh : post.value.title} - Noveris` : 'Noveris'),
+  meta: [
+    { name: 'description', content: computed(() => post.value ? (locale.value === 'zh' ? post.value.excerptZh : post.value.excerpt) : '') },
+    { name: 'keywords', content: computed(() => post.value ? `${post.value.category}, blog, article` : '') },
+    { property: 'og:type', content: 'article' },
+    { property: 'og:title', content: computed(() => post.value ? `${locale.value === 'zh' ? post.value.titleZh : post.value.title}` : '') },
+    { property: 'og:description', content: computed(() => post.value ? (locale.value === 'zh' ? post.value.excerptZh : post.value.excerpt) : '') },
+    { property: 'article:published_time', content: computed(() => post.value?.createdAt || '') },
+    { property: 'article:author', content: 'Liu Yaojie (Passion)' },
+    { name: 'twitter:card', content: 'summary_large_image' },
+    { name: 'twitter:title', content: computed(() => post.value ? `${locale.value === 'zh' ? post.value.titleZh : post.value.title}` : '') },
+    { name: 'twitter:description', content: computed(() => post.value ? (locale.value === 'zh' ? post.value.excerptZh : post.value.excerpt) : '') },
+  ]
+})
 
 // Content to display
 const content = computed(() => {
@@ -54,11 +74,7 @@ const content = computed(() => {
 
 const formattedDate = computed(() => {
   if (!post.value) return ''
-  return new Date(post.value.date).toLocaleDateString(locale.value === 'zh' ? 'zh-CN' : 'en-US', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric'
-  })
+  return formatChinaDate(post.value.createdAt, locale.value)
 })
 
 // Check if translation is available
@@ -124,6 +140,15 @@ const handleTranslate = async () => {
 const showOriginal = () => {
   showTranslation.value = false
 }
+
+// Handle adding comments (in a real app, this would call an API)
+const handleAddComment = (comment: { author: string; email: string; content: string }) => {
+  console.log('New comment:', comment)
+  // In a real app, this would:
+  // 1. Send the comment to an API
+  // 2. Update the local state with the new comment
+  // 3. Show a success notification
+}
 </script>
 
 <template>
@@ -174,6 +199,16 @@ const showOriginal = () => {
             <p>Translating content...</p>
           </div>
           <div class="content" v-html="content"></div>
+
+          <!-- Appreciation -->
+          <Appreciation :post-slug="post.slug" />
+
+          <!-- Comments -->
+          <Comments
+            :comments="post.comments || []"
+            :post-slug="post.slug"
+            @add-comment="handleAddComment"
+          />
         </div>
       </div>
     </article>

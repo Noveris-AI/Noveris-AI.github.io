@@ -1,35 +1,34 @@
 <script setup lang="ts">
 import Navbar from '../components/Navbar.vue'
-import Footer from '../components/Footer.vue'
 </script>
 
 <template>
-  <div class="layout">
-    <!-- Skip Links for Accessibility -->
+  <div class="home-layout">
+    <!-- Skip Link for Accessibility -->
     <a href="#main-content" class="skip-link">Skip to main content</a>
-    <a href="#footer" class="skip-link">Skip to footer</a>
 
     <Navbar />
-    <main id="main-content" class="main-content" role="main" tabindex="-1">
+    <main id="main-content" class="home-content" role="main" tabindex="-1">
       <slot />
     </main>
-    <Footer id="footer" />
   </div>
 </template>
 
 <style scoped>
-.layout {
-  min-height: 100vh;
+.home-layout {
+  height: 100vh;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
 }
 
-.main-content {
+.home-content {
   flex: 1;
+  overflow: hidden;
   outline: none;
 }
 
-/* Skip Links - Hidden until focused */
+/* Skip Link - Hidden until focused */
 .skip-link {
   position: absolute;
   top: -100%;

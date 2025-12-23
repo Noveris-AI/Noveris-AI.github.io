@@ -1,49 +1,76 @@
 import { ref, watch, onMounted } from 'vue'
 
-type Theme = 'light' | 'dark'
+type ThemeMode = 'light' | 'dark' | 'system'
+type AppliedTheme = 'light' | 'dark'
 
-const theme = ref<Theme>('light')
+const themeMode = ref<ThemeMode>('system')
+const appliedTheme = ref<AppliedTheme>('light')
 
 export function useTheme() {
-  const initTheme = () => {
-    const savedTheme = localStorage.getItem('theme') as Theme
-    if (savedTheme) {
-      theme.value = savedTheme
-    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
-      theme.value = 'dark'
-    }
-    applyTheme(theme.value)
+  const getSystemTheme = (): AppliedTheme => {
+    return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
   }
 
-  const applyTheme = (t: Theme) => {
+  const applyTheme = (t: AppliedTheme) => {
+    appliedTheme.value = t
     document.documentElement.setAttribute('data-theme', t)
     document.documentElement.classList.toggle('dark', t === 'dark')
   }
 
-  const toggleTheme = () => {
-    theme.value = theme.value === 'light' ? 'dark' : 'light'
-    localStorage.setItem('theme', theme.value)
-    applyTheme(theme.value)
+  const initTheme = () => {
+    const savedMode = localStorage.getItem('themeMode') as ThemeMode
+    if (savedMode) {
+      themeMode.value = savedMode
+    }
+
+    if (themeMode.value === 'system') {
+      applyTheme(getSystemTheme())
+    } else {
+      applyTheme(themeMode.value)
+    }
+
+    // Listen for system theme changes
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+      if (themeMode.value === 'system') {
+        applyTheme(e.matches ? 'dark' : 'light')
+      }
+    })
   }
 
-  const setTheme = (t: Theme) => {
-    theme.value = t
-    localStorage.setItem('theme', t)
-    applyTheme(t)
+  const setThemeMode = (mode: ThemeMode) => {
+    themeMode.value = mode
+    localStorage.setItem('themeMode', mode)
+
+    if (mode === 'system') {
+      applyTheme(getSystemTheme())
+    } else {
+      applyTheme(mode)
+    }
+  }
+
+  // Legacy toggle for backward compatibility
+  const toggleTheme = () => {
+    const newMode = appliedTheme.value === 'light' ? 'dark' : 'light'
+    setThemeMode(newMode)
   }
 
   onMounted(() => {
     initTheme()
   })
 
-  watch(theme, (newTheme) => {
-    applyTheme(newTheme)
+  watch(themeMode, (newMode) => {
+    if (newMode === 'system') {
+      applyTheme(getSystemTheme())
+    } else {
+      applyTheme(newMode)
+    }
   })
 
   return {
-    theme,
+    theme: appliedTheme,
+    themeMode,
     toggleTheme,
-    setTheme,
+    setThemeMode,
     initTheme
   }
 }

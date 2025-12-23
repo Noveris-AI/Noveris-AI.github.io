@@ -1,18 +1,47 @@
 <script setup lang="ts">
+import { ref, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { RouterLink } from 'vue-router'
+import { useHead } from '@vueuse/head'
 import DefaultLayout from '../layouts/DefaultLayout.vue'
+import BlogCard from '../components/blog/BlogCard.vue'
 import { categories, posts } from '../data/posts'
 
 const { t, locale } = useI18n()
+const selectedCategory = ref('all')
 
 const getCategoryPostCount = (categoryId: string) => {
   return posts.filter(p => p.category === categoryId).length
 }
+
+const filteredPosts = computed(() => {
+  if (selectedCategory.value === 'all') {
+    return posts
+  }
+  return posts.filter(post => post.category === selectedCategory.value)
+})
+
+const currentCategory = computed(() => {
+  if (selectedCategory.value === 'all') return null
+  return categories.find(c => c.id === selectedCategory.value)
+})
+
+// SEO Meta Tags
+useHead({
+  title: computed(() => `${t('categories.title')} - Noveris`),
+  meta: [
+    { name: 'description', content: computed(() => t('categories.subtitle')) },
+    { name: 'keywords', content: 'categories, AI, Cloud Native, Development, LLM, 分类' },
+    { property: 'og:type', content: 'website' },
+    { property: 'og:title', content: computed(() => `${t('categories.title')} - Noveris`) },
+    { property: 'og:description', content: computed(() => t('categories.subtitle')) },
+    { name: 'twitter:card', content: 'summary' },
+  ]
+})
 </script>
 
 <template>
   <DefaultLayout>
+    <!-- Header -->
     <section class="page-header">
       <div class="container">
         <h1>{{ t('categories.title') }}</h1>
@@ -20,26 +49,60 @@ const getCategoryPostCount = (categoryId: string) => {
       </div>
     </section>
 
-    <section class="categories-content">
+    <!-- Category Filter Tags -->
+    <section class="filter-section">
       <div class="container">
-        <div class="categories-grid">
-          <RouterLink
+        <div class="filter-tags">
+          <button
+            :class="['filter-tag', { active: selectedCategory === 'all' }]"
+            @click="selectedCategory = 'all'"
+          >
+            {{ t('blog.all') }}
+            <span class="tag-count">{{ posts.length }}</span>
+          </button>
+          <button
             v-for="category in categories"
             :key="category.id"
-            :to="`/categories/${category.id}`"
-            class="category-card"
+            :class="['filter-tag', { active: selectedCategory === category.id }]"
             :style="{ '--category-color': category.color }"
+            @click="selectedCategory = category.id"
           >
-            <div class="card-header">
-              <span class="category-icon">{{ category.icon }}</span>
-              <span class="post-count">{{ getCategoryPostCount(category.id) }} posts</span>
+            <span class="tag-icon">{{ category.icon }}</span>
+            {{ locale === 'zh' ? category.nameZh : category.name }}
+            <span class="tag-count">{{ getCategoryPostCount(category.id) }}</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Current Category Info -->
+    <Transition name="fade" mode="out-in">
+      <section v-if="currentCategory" class="category-info">
+        <div class="container">
+          <div class="info-card" :style="{ '--category-color': currentCategory.color }">
+            <span class="info-icon">{{ currentCategory.icon }}</span>
+            <div class="info-text">
+              <h2>{{ locale === 'zh' ? currentCategory.nameZh : currentCategory.name }}</h2>
+              <p>{{ t(`categories.${currentCategory.id === 'cloud-native' ? 'cloudNative' : currentCategory.id}Desc`) }}</p>
             </div>
-            <h2>{{ locale === 'zh' ? category.nameZh : category.name }}</h2>
-            <p class="category-desc">
-              {{ t(`categories.${category.id === 'cloud-native' ? 'cloudNative' : category.id}Desc`) }}
-            </p>
-            <span class="view-link">{{ t('categories.viewPosts') }} →</span>
-          </RouterLink>
+          </div>
+        </div>
+      </section>
+    </Transition>
+
+    <!-- Posts Grid -->
+    <section class="posts-section">
+      <div class="container">
+        <div v-if="filteredPosts.length" class="posts-grid">
+          <BlogCard
+            v-for="post in filteredPosts"
+            :key="post.slug"
+            :post="post"
+            data-aos="fade-up"
+          />
+        </div>
+        <div v-else class="no-results">
+          <p>{{ t('blog.noResults') }}</p>
         </div>
       </div>
     </section>
@@ -47,102 +110,166 @@ const getCategoryPostCount = (categoryId: string) => {
 </template>
 
 <style scoped>
-.page-header {
-  padding: 4rem 0;
-  background: var(--bg-secondary);
-  text-align: center;
-}
-
 .container {
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 1.5rem;
 }
 
+/* Header */
+.page-header {
+  padding: 3rem 0;
+  background: var(--bg-secondary);
+  text-align: center;
+  border-bottom: 1px solid var(--border-color);
+}
+
 .page-header h1 {
-  font-size: 2.5rem;
+  font-size: 2rem;
   font-weight: 800;
   margin-bottom: 0.5rem;
 }
 
 .page-header p {
   color: var(--text-secondary);
-  font-size: 1.125rem;
+  font-size: 1rem;
 }
 
-.categories-content {
-  padding: 4rem 0;
+/* Filter Section */
+.filter-section {
+  padding: 1.5rem 0;
+  border-bottom: 1px solid var(--border-color);
 }
 
-.categories-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 2rem;
-}
-
-.category-card {
+.filter-tags {
   display: flex;
-  flex-direction: column;
-  padding: 2rem;
-  background: var(--bg-secondary);
-  border: 1px solid var(--border-color);
-  border-radius: 16px;
-  text-decoration: none;
-  transition: all 0.3s;
+  flex-wrap: wrap;
+  gap: 0.75rem;
 }
 
-.category-card:hover {
-  transform: translateY(-4px);
-  border-color: var(--category-color);
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
-}
-
-.category-card:hover .view-link {
-  color: var(--category-color);
-}
-
-.card-header {
-  display: flex;
-  justify-content: space-between;
+.filter-tag {
+  display: inline-flex;
   align-items: center;
-  margin-bottom: 1rem;
-}
-
-.category-icon {
-  font-size: 3rem;
-}
-
-.post-count {
-  font-size: 0.875rem;
+  gap: 0.5rem;
+  padding: 0.625rem 1.25rem;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-full);
+  background: var(--bg-primary);
   color: var(--text-secondary);
-  background: var(--bg-tertiary);
-  padding: 0.25rem 0.75rem;
-  border-radius: 20px;
+  font-family: var(--font-sans);
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--transition-fast);
 }
 
-.category-card h2 {
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: var(--text-primary);
-  margin-bottom: 0.5rem;
+.filter-tag:hover {
+  border-color: var(--category-color, var(--accent-color));
+  color: var(--category-color, var(--accent-color));
 }
 
-.category-desc {
-  color: var(--text-secondary);
-  line-height: 1.6;
-  flex: 1;
-  margin-bottom: 1rem;
+.filter-tag.active {
+  background: var(--accent-color);
+  border-color: var(--accent-color);
+  color: white;
 }
 
-.view-link {
-  color: var(--accent-color);
+.filter-tag.active .tag-count {
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+}
+
+.tag-icon {
+  font-size: 1.1rem;
+}
+
+.tag-count {
+  font-size: 0.75rem;
   font-weight: 600;
-  transition: color 0.2s;
+  padding: 0.125rem 0.5rem;
+  background: var(--bg-tertiary);
+  border-radius: var(--radius-full);
+  color: var(--text-tertiary);
+}
+
+/* Category Info */
+.category-info {
+  padding: 1.5rem 0;
+}
+
+.info-card {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 1.5rem 2rem;
+  background: linear-gradient(135deg,
+    rgba(13, 148, 136, 0.05) 0%,
+    rgba(52, 211, 153, 0.03) 100%
+  );
+  border: 1px solid var(--border-color);
+  border-left: 4px solid var(--category-color, var(--accent-color));
+  border-radius: var(--radius-lg);
+}
+
+.info-icon {
+  font-size: 2.5rem;
+}
+
+.info-text h2 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-bottom: 0.25rem;
+}
+
+.info-text p {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+}
+
+/* Posts Section */
+.posts-section {
+  padding: 2.5rem 0 4rem;
+}
+
+.posts-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+}
+
+.no-results {
+  text-align: center;
+  padding: 4rem 0;
+  color: var(--text-secondary);
+}
+
+/* Transitions */
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity var(--transition-base);
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .posts-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
 
 @media (max-width: 768px) {
-  .categories-grid {
+  .posts-grid {
     grid-template-columns: 1fr;
+  }
+
+  .info-card {
+    flex-direction: column;
+    text-align: center;
+    gap: 1rem;
   }
 }
 </style>

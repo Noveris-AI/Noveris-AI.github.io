@@ -1,108 +1,155 @@
 <script setup lang="ts">
+import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { useHead } from '@vueuse/head'
 import { RouterLink } from 'vue-router'
-import DefaultLayout from '../layouts/DefaultLayout.vue'
-import BlogCard from '../components/blog/BlogCard.vue'
-import { posts, categories } from '../data/posts'
+import HomeLayout from '../layouts/HomeLayout.vue'
+import { posts, categories, formatChinaDate } from '../data/posts'
 
 const { t, locale } = useI18n()
 const latestPosts = posts.slice(0, 3)
+
+// Helper to get category name
+const getCategoryName = (categoryId: string) => {
+  const cat = categories.find(c => c.id === categoryId)
+  return locale.value === 'zh' ? cat?.nameZh : cat?.name
+}
+
+// SEO Meta Tags
+useHead({
+  title: computed(() => `Noveris - ${t('home.subtitle')}`),
+  meta: [
+    { name: 'description', content: computed(() => t('home.description')) },
+    { name: 'keywords', content: 'AI, Cloud Native, Development, LLM, 人工智能, 云原生, 技术博客' },
+    // Open Graph
+    { property: 'og:type', content: 'website' },
+    { property: 'og:title', content: computed(() => `Noveris - ${t('home.subtitle')}`) },
+    { property: 'og:description', content: computed(() => t('home.description')) },
+    { property: 'og:site_name', content: 'Noveris' },
+    // Twitter Card
+    { name: 'twitter:card', content: 'summary_large_image' },
+    { name: 'twitter:title', content: computed(() => `Noveris - ${t('home.subtitle')}`) },
+    { name: 'twitter:description', content: computed(() => t('home.description')) },
+  ]
+})
 </script>
 
 <template>
-  <DefaultLayout>
-    <section class="hero">
-      <div class="container">
+  <HomeLayout>
+    <div class="home-container">
+      <!-- Left Side: Hero -->
+      <section class="hero-section">
         <div class="hero-content">
-          <h1 class="hero-title gradient-text">{{ t('home.title') }}</h1>
+          <h1 class="hero-title">
+            <span class="gradient-text">Noveris</span>
+          </h1>
           <p class="hero-subtitle">{{ t('home.subtitle') }}</p>
           <p class="hero-description">{{ t('home.description') }}</p>
           <div class="hero-actions">
-            <RouterLink to="/blog" class="btn btn-primary">{{ t('home.viewAll') }}</RouterLink>
-            <RouterLink to="/categories" class="btn btn-secondary">{{ t('nav.categories') }}</RouterLink>
+            <RouterLink to="/blog" class="btn btn-primary">
+              {{ t('home.viewAll') }}
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M5 12h14M12 5l7 7-7 7"/>
+              </svg>
+            </RouterLink>
+            <RouterLink to="/about" class="btn btn-secondary">
+              {{ t('nav.about') }}
+            </RouterLink>
           </div>
         </div>
-        <div class="hero-visual">
-          <img src="/logo.svg" alt="Noveris" class="hero-logo" />
-        </div>
-      </div>
-    </section>
+      </section>
 
-    <section class="categories-section">
-      <div class="container">
-        <h2 class="section-title">{{ t('home.featuredCategories') }}</h2>
-        <div class="categories-grid">
-          <RouterLink
-            v-for="category in categories"
-            :key="category.id"
-            :to="`/categories/${category.id}`"
-            class="category-card"
-            :style="{ '--category-color': category.color }"
-          >
-            <span class="category-icon">{{ category.icon }}</span>
-            <h3>{{ locale === 'zh' ? category.nameZh : category.name }}</h3>
-            <span class="arrow">→</span>
-          </RouterLink>
+      <!-- Right Side: Categories + Latest Posts -->
+      <section class="content-section">
+        <!-- Categories Grid -->
+        <div class="categories-area">
+          <div class="categories-grid">
+            <RouterLink
+              v-for="category in categories"
+              :key="category.id"
+              :to="`/categories/${category.id}`"
+              class="category-card card-hover"
+              :style="{ '--category-color': category.color }"
+            >
+              <span class="category-icon">{{ category.icon }}</span>
+              <span class="category-name">{{ locale === 'zh' ? category.nameZh : category.name }}</span>
+            </RouterLink>
+          </div>
         </div>
-      </div>
-    </section>
 
-    <section class="latest-posts">
-      <div class="container">
-        <div class="section-header">
-          <h2>{{ t('home.latestPosts') }}</h2>
-          <RouterLink to="/blog" class="view-all">{{ t('home.viewAll') }} →</RouterLink>
+        <!-- Latest Posts -->
+        <div class="posts-area">
+          <div class="posts-header">
+            <h2>{{ t('home.latestPosts') }}</h2>
+            <RouterLink to="/blog" class="view-all">
+              {{ t('home.viewAll') }} →
+            </RouterLink>
+          </div>
+          <div class="posts-list">
+            <RouterLink
+              v-for="post in latestPosts"
+              :key="post.slug"
+              :to="`/blog/${post.slug}`"
+              class="post-item"
+            >
+              <div class="post-meta">
+                <span class="post-category tag">{{ getCategoryName(post.category) }}</span>
+                <span class="post-date">{{ formatChinaDate(post.createdAt, locale) }}</span>
+              </div>
+              <h3 class="post-title">{{ locale === 'zh' ? post.titleZh : post.title }}</h3>
+            </RouterLink>
+          </div>
         </div>
-        <div class="posts-grid">
-          <BlogCard v-for="post in latestPosts" :key="post.slug" :post="post" />
-        </div>
-      </div>
-    </section>
-  </DefaultLayout>
+      </section>
+    </div>
+  </HomeLayout>
 </template>
 
 <style scoped>
-.hero {
-  padding: 5rem 0;
-  background: var(--bg-secondary);
-}
-
-.container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 1.5rem;
-}
-
-.hero .container {
+.home-container {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 4rem;
+  height: 100%;
+  background: linear-gradient(135deg,
+    rgba(var(--bg-rgb), 0.95) 0%,
+    rgba(var(--bg-rgb), 0.98) 100%
+  );
+}
+
+/* Left Side: Hero */
+.hero-section {
+  display: flex;
   align-items: center;
+  justify-content: center;
+  padding: 3rem;
+  background: linear-gradient(135deg,
+    rgba(13, 148, 136, 0.03) 0%,
+    rgba(52, 211, 153, 0.03) 100%
+  );
+  border-right: 1px solid var(--border-light);
+}
+
+.hero-content {
+  max-width: 480px;
 }
 
 .hero-title {
-  font-size: 4rem;
+  font-size: clamp(3rem, 6vw, 5rem);
   font-weight: 800;
   line-height: 1.1;
   margin-bottom: 1rem;
 }
 
-.gradient-text {
-  background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
 .hero-subtitle {
+  font-family: var(--font-sans);
   font-size: 1.5rem;
+  font-weight: 600;
   color: var(--text-primary);
   margin-bottom: 1rem;
-  font-weight: 600;
 }
 
 .hero-description {
-  font-size: 1.125rem;
+  font-size: 1.1rem;
   color: var(--text-secondary);
   line-height: 1.7;
   margin-bottom: 2rem;
@@ -111,191 +158,193 @@ const latestPosts = posts.slice(0, 3)
 .hero-actions {
   display: flex;
   gap: 1rem;
+  flex-wrap: wrap;
 }
 
-.btn {
-  padding: 0.875rem 1.75rem;
-  border-radius: 8px;
-  font-weight: 600;
-  text-decoration: none;
-  transition: all 0.2s;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.btn-primary {
-  background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
-  color: white;
-}
-
-.btn-primary:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 10px 30px rgba(13, 148, 136, 0.3);
-}
-
-.btn-secondary {
-  background: var(--bg-primary);
-  color: var(--text-primary);
-  border: 1px solid var(--border-color);
-}
-
-.btn-secondary:hover {
-  background: var(--bg-tertiary);
-  border-color: var(--accent-color);
-}
-
-.hero-visual {
+/* Right Side: Content */
+.content-section {
   display: flex;
-  justify-content: center;
-  align-items: center;
+  flex-direction: column;
+  padding: 2rem 3rem;
+  overflow-y: auto;
 }
 
-.hero-logo {
-  width: 280px;
-  height: 280px;
-  animation: float 6s ease-in-out infinite;
-}
-
-@keyframes float {
-  0%, 100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-20px);
-  }
-}
-
-.categories-section {
-  padding: 5rem 0;
-}
-
-.section-title {
-  font-size: 1.75rem;
-  font-weight: 700;
+/* Categories */
+.categories-area {
   margin-bottom: 2rem;
-  text-align: center;
 }
 
 .categories-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 1.5rem;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
 }
 
 .category-card {
   display: flex;
-  flex-direction: column;
   align-items: center;
   gap: 0.75rem;
-  padding: 2rem 1.5rem;
+  padding: 1rem 1.25rem;
   background: var(--bg-secondary);
   border: 1px solid var(--border-color);
-  border-radius: 12px;
+  border-radius: var(--radius-lg);
   text-decoration: none;
-  transition: all 0.3s;
+  transition: all var(--transition-base);
 }
 
 .category-card:hover {
-  transform: translateY(-4px);
-  border-color: var(--category-color);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-}
-
-.category-card:hover .arrow {
-  transform: translateX(4px);
-  color: var(--category-color);
+  border-color: var(--category-color, var(--accent-color));
+  background: var(--bg-tertiary);
 }
 
 .category-icon {
-  font-size: 2.5rem;
+  font-size: 1.5rem;
 }
 
-.category-card h3 {
-  font-size: 1rem;
+.category-name {
+  font-family: var(--font-sans);
+  font-size: 0.95rem;
   font-weight: 600;
   color: var(--text-primary);
-  text-align: center;
 }
 
-.arrow {
-  color: var(--text-secondary);
-  transition: all 0.2s;
+/* Posts */
+.posts-area {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
 }
 
-.latest-posts {
-  padding: 5rem 0;
-  background: var(--bg-secondary);
-}
-
-.section-header {
+.posts-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 2rem;
+  margin-bottom: 1rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--border-color);
 }
 
-.section-header h2 {
-  font-size: 1.75rem;
-  font-weight: 700;
+.posts-header h2 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
 }
 
 .view-all {
+  font-family: var(--font-sans);
+  font-size: 0.9rem;
+  font-weight: 600;
   color: var(--accent-color);
   text-decoration: none;
-  font-weight: 600;
-  transition: opacity 0.2s;
+  transition: opacity var(--transition-fast);
 }
 
 .view-all:hover {
   opacity: 0.8;
 }
 
-.posts-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 2rem;
+.posts-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
 }
 
+.post-item {
+  display: block;
+  padding: 1rem;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  text-decoration: none;
+  transition: all var(--transition-base);
+}
+
+.post-item:hover {
+  background: var(--bg-tertiary);
+  border-color: var(--accent-color);
+  transform: translateX(4px);
+}
+
+.post-meta {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.5rem;
+}
+
+.post-category {
+  font-size: 0.75rem;
+  padding: 0.2rem 0.5rem;
+}
+
+.post-date {
+  font-family: var(--font-sans);
+  font-size: 0.8rem;
+  color: var(--text-tertiary);
+}
+
+.post-title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  line-height: 1.4;
+}
+
+/* Responsive */
 @media (max-width: 1024px) {
-  .hero .container {
+  .home-container {
     grid-template-columns: 1fr;
+    overflow-y: auto;
+  }
+
+  .hero-section {
+    border-right: none;
+    border-bottom: 1px solid var(--border-light);
+    padding: 2rem;
+  }
+
+  .hero-content {
     text-align: center;
+    max-width: 100%;
   }
 
-  .hero-visual {
-    order: -1;
-  }
-
-  .hero-logo {
-    width: 200px;
-    height: 200px;
+  .hero-title {
+    font-size: 3rem;
   }
 
   .hero-actions {
     justify-content: center;
   }
 
-  .categories-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  .posts-grid {
-    grid-template-columns: repeat(2, 1fr);
+  .content-section {
+    padding: 2rem;
+    overflow-y: visible;
   }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 640px) {
   .hero-title {
     font-size: 2.5rem;
   }
 
-  .categories-grid {
-    grid-template-columns: 1fr 1fr;
+  .hero-subtitle {
+    font-size: 1.25rem;
   }
 
-  .posts-grid {
+  .categories-grid {
     grid-template-columns: 1fr;
+  }
+
+  .hero-actions {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .hero-actions .btn {
+    width: 100%;
+    justify-content: center;
   }
 }
 </style>
