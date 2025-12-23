@@ -1,8 +1,8 @@
 # Noveris Blog Setup Script for Windows
-# 自动安装 Node.js、Git 并启动博客
+# 在当前目录安装并启动博客
 
-Write-Host "========================================"  -ForegroundColor Green
-Write-Host "  Noveris Blog 自动安装脚本"  -ForegroundColor Green
+Write-Host "========================================" -ForegroundColor Green
+Write-Host "  Noveris Blog 自动安装脚本" -ForegroundColor Green
 Write-Host "========================================" -ForegroundColor Green
 Write-Host ""
 
@@ -19,27 +19,26 @@ if (-not $isAdmin) {
     }
 }
 
-# 检查并安装 Chocolatey
-Write-Host "[1/5] 检查 Chocolatey 包管理器..." -ForegroundColor Yellow
-if (-not (Get-Command choco -ErrorAction SilentlyContinue)) {
-    Write-Host "Chocolatey 未安装，正在安装..." -ForegroundColor Red
-    Set-ExecutionPolicy Bypass -Scope Process -Force
-    [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072
-    Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
-
-    # 刷新环境变量
-    $env:Path = [System.Environment]::GetEnvironmentVariable("Path","Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path","User")
-
-    Write-Host "✓ Chocolatey 安装完成" -ForegroundColor Green
-} else {
-    Write-Host "✓ Chocolatey 已安装" -ForegroundColor Green
-}
+Write-Host "检测到系统: Windows" -ForegroundColor Blue
+Write-Host "当前目录: $(Get-Location)" -ForegroundColor Blue
 Write-Host ""
 
 # 检查并安装 Git
-Write-Host "[2/5] 检查 Git..." -ForegroundColor Yellow
+Write-Host "[1/3] 检查 Git..." -ForegroundColor Yellow
 if (-not (Get-Command git -ErrorAction SilentlyContinue)) {
     Write-Host "Git 未安装，正在安装..." -ForegroundColor Red
+
+    # 检查并安装 Chocolatey
+    if (-not (Get-Command choco -ErrorAction SilentlyContinue)) {
+        Write-Host "正在安装 Chocolatey..." -ForegroundColor Yellow
+        Set-ExecutionPolicy Bypass -Scope Process -Force
+        [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072
+        Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
+
+        # 刷新环境变量
+        $env:Path = [System.Environment]::GetEnvironmentVariable("Path","Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path","User")
+    }
+
     choco install git -y
 
     # 刷新环境变量
@@ -53,9 +52,23 @@ if (-not (Get-Command git -ErrorAction SilentlyContinue)) {
 Write-Host ""
 
 # 检查并安装 Node.js
-Write-Host "[3/5] 检查 Node.js..." -ForegroundColor Yellow
+Write-Host "[2/3] 检查 Node.js..." -ForegroundColor Yellow
+$NODE_REQUIRED_VERSION = 18
+
 if (-not (Get-Command node -ErrorAction SilentlyContinue)) {
     Write-Host "Node.js 未安装，正在安装..." -ForegroundColor Red
+
+    # 确保 Chocolatey 已安装
+    if (-not (Get-Command choco -ErrorAction SilentlyContinue)) {
+        Write-Host "正在安装 Chocolatey..." -ForegroundColor Yellow
+        Set-ExecutionPolicy Bypass -Scope Process -Force
+        [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072
+        Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
+
+        # 刷新环境变量
+        $env:Path = [System.Environment]::GetEnvironmentVariable("Path","Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path","User")
+    }
+
     choco install nodejs-lts -y
 
     # 刷新环境变量
@@ -67,43 +80,44 @@ if (-not (Get-Command node -ErrorAction SilentlyContinue)) {
     $npmVersion = npm --version
     Write-Host "✓ Node.js 已安装: $nodeVersion" -ForegroundColor Green
     Write-Host "✓ npm 已安装: v$npmVersion" -ForegroundColor Green
+
+    # 检查版本是否满足要求
+    $nodeMajor = [int]($nodeVersion -replace 'v(\d+)\..*', '$1')
+    if ($nodeMajor -lt $NODE_REQUIRED_VERSION) {
+        Write-Host "⚠ 警告: Node.js 版本过低 (需要 v${NODE_REQUIRED_VERSION}+)" -ForegroundColor Yellow
+        Write-Host "建议升级 Node.js 以获得最佳体验" -ForegroundColor Yellow
+    }
 }
 Write-Host ""
 
-# 克隆或更新仓库
-Write-Host "[4/5] 准备项目..." -ForegroundColor Yellow
-$repoUrl = "https://github.com/Noveris-AI/Noveris-AI.github.io.git"
-$projectDir = "$env:USERPROFILE\Noveris-Blog"
+# 安装项目依赖
+Write-Host "[3/3] 安装项目依赖..." -ForegroundColor Yellow
 
-if (Test-Path $projectDir) {
-    Write-Host "项目目录已存在，正在更新..."
-    Set-Location $projectDir
-    git pull
-} else {
-    Write-Host "正在克隆项目..."
-    git clone $repoUrl $projectDir
-    Set-Location $projectDir
+# 检查是否存在 package.json
+if (-not (Test-Path "package.json")) {
+    Write-Host "错误: 未找到 package.json 文件" -ForegroundColor Red
+    Write-Host "请确保在项目根目录下运行此脚本" -ForegroundColor Red
+    exit 1
 }
-Write-Host "✓ 项目准备完成" -ForegroundColor Green
-Write-Host ""
 
-# 安装依赖
-Write-Host "[5/5] 安装项目依赖..." -ForegroundColor Yellow
 npm install
+
 Write-Host "✓ 依赖安装完成" -ForegroundColor Green
 Write-Host ""
 
 # 完成
-Write-Host "========================================"  -ForegroundColor Green
-Write-Host "  🎉 安装完成！"  -ForegroundColor Green
+Write-Host "========================================" -ForegroundColor Green
+Write-Host "  🎉 安装完成！" -ForegroundColor Green
 Write-Host "========================================" -ForegroundColor Green
 Write-Host ""
 Write-Host "项目路径: " -NoNewline
-Write-Host $projectDir -ForegroundColor Green
+Write-Host (Get-Location) -ForegroundColor Green
 Write-Host ""
 Write-Host "运行以下命令启动博客："
-Write-Host "cd $projectDir" -ForegroundColor Yellow
 Write-Host "npm run dev" -ForegroundColor Yellow
+Write-Host ""
+Write-Host "或者构建生产版本："
+Write-Host "npm run build" -ForegroundColor Yellow
 Write-Host ""
 Write-Host "访问以下地址："
 Write-Host "  博客首页: " -NoNewline
@@ -115,5 +129,9 @@ Write-Host ""
 # 询问是否立即启动
 $start = Read-Host "是否现在启动开发服务器？(Y/N)"
 if ($start -eq "Y" -or $start -eq "y") {
+    Write-Host ""
+    Write-Host "正在启动开发服务器..." -ForegroundColor Green
+    Write-Host "按 Ctrl+C 停止服务器" -ForegroundColor Yellow
+    Write-Host ""
     npm run dev
 }
