@@ -111,10 +111,7 @@ useHead({
             </RouterLink>
           </div>
         </div>
-        <!-- Don't show empty state on initial load, only when actually no posts exist after loading -->
-        <div v-else-if="!isLoading && posts.length === 0" class="empty-state">
-          <p>{{ t('blog.noResults') }}</p>
-        </div>
+        <!-- If no posts, featured section shows nothing (not an error state) -->
       </div>
     </section>
 
