@@ -111,7 +111,8 @@ useHead({
             </RouterLink>
           </div>
         </div>
-        <div v-else class="empty-state">
+        <!-- Don't show empty state on initial load, only when actually no posts exist after loading -->
+        <div v-else-if="!isLoading && posts.length === 0" class="empty-state">
           <p>{{ t('blog.noResults') }}</p>
         </div>
       </div>
@@ -151,7 +152,8 @@ useHead({
             data-aos="fade-up"
           />
         </div>
-        <div v-else class="no-results">
+        <!-- Only show "no results" if user has actively searched or filtered -->
+        <div v-else-if="searchQuery.trim() || selectedCategory !== 'all'" class="no-results">
           <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
             <circle cx="11" cy="11" r="8"/>
             <path d="m21 21-4.3-4.3"/>
