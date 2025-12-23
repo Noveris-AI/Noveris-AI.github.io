@@ -25,6 +25,7 @@ const toggleLocale = () => {
         <RouterLink to="/blog" class="nav-link">{{ t('nav.blog') }}</RouterLink>
         <RouterLink to="/categories" class="nav-link">{{ t('nav.categories') }}</RouterLink>
         <RouterLink to="/about" class="nav-link">{{ t('nav.about') }}</RouterLink>
+        <RouterLink to="/contact" class="nav-link">{{ t('nav.contact') }}</RouterLink>
       </nav>
 
       <div class="header-actions">

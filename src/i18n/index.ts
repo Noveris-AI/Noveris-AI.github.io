@@ -6,7 +6,8 @@ const messages = {
       home: 'Home',
       blog: 'Blog',
       categories: 'Categories',
-      about: 'About'
+      about: 'About',
+      contact: 'Contact'
     },
     home: {
       title: 'Noveris',
@@ -55,6 +56,7 @@ const messages = {
       title: 'Contact',
       subtitle: 'Get in touch',
       email: 'Email',
+      noSubject: 'No subject',
       form: {
         name: 'Your Name',
         email: 'Your Email',
@@ -76,7 +78,8 @@ const messages = {
       home: '首页',
       blog: '博客',
       categories: '分类',
-      about: '关于'
+      about: '关于',
+      contact: '联系'
     },
     home: {
       title: 'Noveris',
@@ -125,6 +128,7 @@ const messages = {
       title: '联系',
       subtitle: '与我联系',
       email: '邮箱',
+      noSubject: '无主题',
       form: {
         name: '您的姓名',
         email: '您的邮箱',

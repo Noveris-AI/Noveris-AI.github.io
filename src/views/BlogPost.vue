@@ -1,13 +1,19 @@
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, ref, watch, onMounted } from 'vue'
 import { useRoute, RouterLink } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { marked } from 'marked'
 import DefaultLayout from '../layouts/DefaultLayout.vue'
 import { posts } from '../data/posts'
+import { useTranslation, isChinese } from '../composables/useTranslation'
 
 const route = useRoute()
 const { locale, t } = useI18n()
+const { isTranslating, translateMarkdown } = useTranslation()
+
+const translatedContent = ref<string | null>(null)
+const showTranslation = ref(false)
+const hasTranslationAvailable = ref(false)
 
 const post = computed(() => {
   return posts.find(p => p.slug === route.params.slug)
@@ -15,13 +21,35 @@ const post = computed(() => {
 
 const title = computed(() => {
   if (!post.value) return ''
+  // If showing translation and we have translated title, use it
+  if (showTranslation.value && translatedTitle.value) {
+    return translatedTitle.value
+  }
   return locale.value === 'zh' ? post.value.titleZh : post.value.title
 })
 
+const translatedTitle = ref<string | null>(null)
+
+// Content to display
 const content = computed(() => {
   if (!post.value) return ''
-  const rawContent = locale.value === 'zh' ? post.value.contentZh : post.value.content
-  return marked(rawContent)
+
+  let contentToRender: string
+
+  if (showTranslation.value && translatedContent.value) {
+    contentToRender = translatedContent.value
+  } else if (locale.value === 'zh') {
+    contentToRender = post.value.contentZh || post.value.content
+  } else {
+    // English - check if we have English content or need translation
+    contentToRender = post.value.content
+    // If content is same as Chinese (meaning no English version), show Chinese
+    if (post.value.content === post.value.contentZh || !post.value.content) {
+      contentToRender = post.value.contentZh
+    }
+  }
+
+  return marked(contentToRender)
 })
 
 const formattedDate = computed(() => {
@@ -32,6 +60,70 @@ const formattedDate = computed(() => {
     day: 'numeric'
   })
 })
+
+// Check if translation is available
+onMounted(() => {
+  checkTranslationAvailable()
+})
+
+watch(locale, () => {
+  // Reset translation state when language changes
+  showTranslation.value = false
+  translatedContent.value = null
+  translatedTitle.value = null
+  checkTranslationAvailable()
+})
+
+const checkTranslationAvailable = () => {
+  if (!post.value) return
+
+  if (locale.value === 'en') {
+    // Check if content is primarily Chinese
+    const contentToCheck = post.value.contentZh || post.value.content
+    hasTranslationAvailable.value = isChinese(contentToCheck)
+  } else {
+    hasTranslationAvailable.value = false
+  }
+}
+
+const handleTranslate = async () => {
+  if (!post.value || isTranslating.value) return
+
+  showTranslation.value = true
+
+  // Check cache first
+  const cacheKey = `translated_${post.value.slug}_${locale.value}`
+  const cached = localStorage.getItem(cacheKey)
+
+  if (cached) {
+    const { title, content } = JSON.parse(cached)
+    translatedTitle.value = title
+    translatedContent.value = content
+    return
+  }
+
+  // Translate content
+  const sourceContent = post.value.contentZh || post.value.content
+  const sourceTitle = post.value.titleZh || post.value.title
+
+  const [translatedTitleResult, translatedContentResult] = await Promise.all([
+    translateMarkdown(sourceTitle, 'zh-CN', 'en'),
+    translateMarkdown(sourceContent, 'zh-CN', 'en')
+  ])
+
+  translatedTitle.value = translatedTitleResult
+  translatedContent.value = translatedContentResult
+
+  // Cache the translation
+  localStorage.setItem(cacheKey, JSON.stringify({
+    title: translatedTitleResult,
+    content: translatedContentResult
+  }))
+}
+
+const showOriginal = () => {
+  showTranslation.value = false
+}
 </script>
 
 <template>
@@ -40,6 +132,32 @@ const formattedDate = computed(() => {
       <header class="post-header">
         <div class="container">
           <RouterLink to="/blog" class="back-link">← {{ t('blog.title') }}</RouterLink>
+
+          <!-- Translation Banner -->
+          <div v-if="hasTranslationAvailable && !showTranslation" class="translation-banner">
+            <span class="banner-icon">🌐</span>
+            <span class="banner-text">
+              {{ locale === 'en' ? 'This article is written in Chinese.' : 'This article is written in English.' }}
+            </span>
+            <button
+              class="translate-btn"
+              @click="handleTranslate"
+              :disabled="isTranslating"
+            >
+              {{ isTranslating ? 'Translating...' : 'Translate to English' }}
+            </button>
+          </div>
+
+          <div v-if="showTranslation" class="translation-banner translated">
+            <span class="banner-icon">✓</span>
+            <span class="banner-text">
+              {{ locale === 'en' ? 'Auto-translated from Chinese' : 'Auto-translated' }}
+            </span>
+            <button class="translate-btn secondary" @click="showOriginal">
+              Show Original
+            </button>
+          </div>
+
           <div class="post-meta">
             <span class="category">{{ post.category }}</span>
             <span class="date">{{ formattedDate }}</span>
@@ -51,6 +169,10 @@ const formattedDate = computed(() => {
 
       <div class="post-content">
         <div class="container">
+          <div v-if="isTranslating" class="translating-overlay">
+            <div class="spinner"></div>
+            <p>Translating content...</p>
+          </div>
           <div class="content" v-html="content"></div>
         </div>
       </div>
@@ -94,6 +216,66 @@ const formattedDate = computed(() => {
   opacity: 0.8;
 }
 
+.translation-banner {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.875rem 1.25rem;
+  background: rgba(13, 148, 136, 0.1);
+  border: 1px solid rgba(13, 148, 136, 0.2);
+  border-radius: 10px;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.translation-banner.translated {
+  background: rgba(16, 185, 129, 0.1);
+  border-color: rgba(16, 185, 129, 0.2);
+}
+
+.banner-icon {
+  font-size: 1.25rem;
+}
+
+.banner-text {
+  flex: 1;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
+
+.translate-btn {
+  padding: 0.5rem 1rem;
+  background: var(--accent-color);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.translate-btn:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(13, 148, 136, 0.3);
+}
+
+.translate-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.translate-btn.secondary {
+  background: transparent;
+  color: var(--accent-color);
+  border: 1px solid var(--accent-color);
+}
+
+.translate-btn.secondary:hover {
+  background: var(--accent-color);
+  color: white;
+}
+
 .post-meta {
   display: flex;
   flex-wrap: wrap;
@@ -119,6 +301,31 @@ const formattedDate = computed(() => {
 
 .post-content {
   padding: 3rem 0;
+  position: relative;
+}
+
+.translating-overlay {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem;
+  text-align: center;
+  color: var(--text-secondary);
+}
+
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid var(--border-color);
+  border-top-color: var(--accent-color);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  margin-bottom: 1rem;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
 }
 
 .content {
@@ -203,7 +410,7 @@ const formattedDate = computed(() => {
 }
 
 .btn-primary {
-  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
   color: white;
 }
 
@@ -214,6 +421,16 @@ const formattedDate = computed(() => {
 
   .content {
     font-size: 1rem;
+  }
+
+  .translation-banner {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  .translate-btn {
+    width: 100%;
   }
 }
 </style>
