@@ -1,0 +1,35 @@
+version: '3.8'
+
+services:
+  # Strapi CMS 后端
+  strapi:
+    image: node:20-alpine
+    container_name: noveris-strapi
+    restart: unless-stopped
+    working_dir: /app
+    command: sh -c "if [ ! -f package.json ]; then npx create-strapi-app@latest . --quickstart --no-run; fi && npm run develop"
+    ports:
+      - "1337:1337"
+    environment:
+      - NODE_ENV=development
+      - HOST=0.0.0.0
+      - PORT=1337
+      - DATABASE_CLIENT=sqlite
+      - DATABASE_FILENAME=.tmp/data.db
+      - JWT_SECRET=${JWT_SECRET:-your-jwt-secret-change-me}
+      - ADMIN_JWT_SECRET=${ADMIN_JWT_SECRET:-your-admin-jwt-secret-change-me}
+      - APP_KEYS=${APP_KEYS:-key1,key2,key3,key4}
+      - API_TOKEN_SALT=${API_TOKEN_SALT:-your-api-token-salt}
+      - TRANSFER_TOKEN_SALT=${TRANSFER_TOKEN_SALT:-your-transfer-token-salt}
+    volumes:
+      - ./strapi:/app
+      - strapi_node_modules:/app/node_modules
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:1337/_health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+
+volumes:
+  strapi_node_modules:

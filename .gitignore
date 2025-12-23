@@ -22,3 +22,10 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Strapi CMS data (contains database and uploads)
+strapi/
+
+# Environment files with secrets
+.env
+!.env.example

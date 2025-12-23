@@ -4,14 +4,15 @@ import { useI18n } from 'vue-i18n'
 import { useHead } from '@vueuse/head'
 import { RouterLink } from 'vue-router'
 import HomeLayout from '../layouts/HomeLayout.vue'
-import { posts, categories, formatChinaDate } from '../data/posts'
+import { formatChinaDate } from '../data/posts'
+import { useBlog } from '../composables/useBlog'
 
 const { t, locale } = useI18n()
-const latestPosts = posts.slice(0, 3)
+const { categories, latestPosts, isLoading } = useBlog()
 
 // Helper to get category name
 const getCategoryName = (categoryId: string) => {
-  const cat = categories.find(c => c.id === categoryId)
+  const cat = categories.value.find(c => c.id === categoryId)
   return locale.value === 'zh' ? cat?.nameZh : cat?.name
 }
 
@@ -85,7 +86,10 @@ useHead({
               {{ t('home.viewAll') }} →
             </RouterLink>
           </div>
-          <div class="posts-list">
+          <div v-if="isLoading" class="posts-loading">
+            <div class="spinner"></div>
+          </div>
+          <div v-else class="posts-list">
             <RouterLink
               v-for="post in latestPosts"
               :key="post.slug"
@@ -98,6 +102,9 @@ useHead({
               </div>
               <h3 class="post-title">{{ locale === 'zh' ? post.titleZh : post.title }}</h3>
             </RouterLink>
+            <div v-if="latestPosts.length === 0" class="no-posts">
+              {{ t('blog.noResults') }}
+            </div>
           </div>
         </div>
       </section>
@@ -290,6 +297,33 @@ useHead({
   font-weight: 600;
   color: var(--text-primary);
   line-height: 1.4;
+}
+
+/* Loading */
+.posts-loading {
+  display: flex;
+  justify-content: center;
+  padding: 2rem;
+}
+
+.spinner {
+  width: 24px;
+  height: 24px;
+  border: 2px solid var(--border-color);
+  border-top-color: var(--accent-color);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.no-posts {
+  padding: 1rem;
+  text-align: center;
+  color: var(--text-tertiary);
+  font-size: 0.9rem;
 }
 
 /* Responsive */

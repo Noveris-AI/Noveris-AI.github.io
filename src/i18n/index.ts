@@ -29,7 +29,8 @@ const messages = {
       all: 'All',
       readTime: 'min read',
       noPosts: 'No posts yet',
-      noPostsDesc: 'Check back soon for new content!'
+      noPostsDesc: 'Check back soon for new content!',
+      loading: 'Loading articles...'
     },
     categories: {
       title: 'Categories',
@@ -163,7 +164,8 @@ const messages = {
       all: '全部',
       readTime: '分钟阅读',
       noPosts: '暂无文章',
-      noPostsDesc: '敬请期待新内容!'
+      noPostsDesc: '敬请期待新内容!',
+      loading: '加载文章中...'
     },
     categories: {
       title: '分类',

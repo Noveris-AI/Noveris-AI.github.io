@@ -5,23 +5,24 @@ import { useHead } from '@vueuse/head'
 import DefaultLayout from '../layouts/DefaultLayout.vue'
 import BlogCard from '../components/blog/BlogCard.vue'
 import FeaturedPost from '../components/blog/FeaturedPost.vue'
-import { posts, categories, formatChinaDate } from '../data/posts'
+import { formatChinaDate } from '../data/posts'
+import { useBlog } from '../composables/useBlog'
 
 const { t, locale } = useI18n()
+const { posts, categories, featuredPost, isLoading } = useBlog()
 const searchQuery = ref('')
 const selectedCategory = ref('all')
 
-const featuredPost = computed(() => posts[0])
-const sidebarPosts = computed(() => posts.slice(1, 4))
+const sidebarPosts = computed(() => posts.value.slice(1, 4))
 
 // Helper to get category name
 const getCategoryName = (categoryId: string) => {
-  const cat = categories.find(c => c.id === categoryId)
+  const cat = categories.value.find(c => c.id === categoryId)
   return locale.value === 'zh' ? cat?.nameZh : cat?.name
 }
 
 const filteredPosts = computed(() => {
-  let result = posts.slice(1) // Exclude featured post
+  let result = posts.value.slice(1) // Exclude featured post
 
   if (selectedCategory.value !== 'all') {
     result = result.filter(post => post.category === selectedCategory.value)
@@ -83,7 +84,11 @@ useHead({
     <!-- Featured Section -->
     <section class="featured-section">
       <div class="container">
-        <div class="featured-grid">
+        <div v-if="isLoading" class="loading-state">
+          <div class="spinner"></div>
+          <p>{{ t('blog.loading') || 'Loading...' }}</p>
+        </div>
+        <div v-else-if="posts.length > 0" class="featured-grid">
           <!-- Large Featured Card -->
           <div v-if="featuredPost" class="featured-main">
             <FeaturedPost :post="featuredPost" />
@@ -105,6 +110,9 @@ useHead({
               </div>
             </RouterLink>
           </div>
+        </div>
+        <div v-else class="empty-state">
+          <p>{{ t('blog.noResults') }}</p>
         </div>
       </div>
     </section>
@@ -347,6 +355,35 @@ useHead({
 
 .no-results svg {
   opacity: 0.5;
+}
+
+/* Loading State */
+.loading-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  padding: 4rem 0;
+  color: var(--text-secondary);
+}
+
+.spinner {
+  width: 32px;
+  height: 32px;
+  border: 3px solid var(--border-color);
+  border-top-color: var(--accent-color);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.empty-state {
+  padding: 4rem 0;
+  text-align: center;
+  color: var(--text-tertiary);
 }
 
 /* Responsive */

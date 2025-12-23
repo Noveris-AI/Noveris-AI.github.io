@@ -1,4 +1,5 @@
 export interface Post {
+  id?: number
   slug: string
   title: string
   titleZh: string
@@ -13,6 +14,7 @@ export interface Post {
   icon?: string
   color?: string
   likes?: number
+  cover?: string     // Cover image URL from Strapi
   comments?: Comment[]
 }
 

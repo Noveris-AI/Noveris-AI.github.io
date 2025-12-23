@@ -5,13 +5,15 @@ import { useI18n } from 'vue-i18n'
 import { useHead } from '@vueuse/head'
 import { marked } from 'marked'
 import DefaultLayout from '../layouts/DefaultLayout.vue'
-import { posts, formatChinaDate } from '../data/posts'
+import { formatChinaDate } from '../data/posts'
+import { useBlog } from '../composables/useBlog'
 import { useTranslation, isChinese } from '../composables/useTranslation'
 import Comments from '../components/blog/Comments.vue'
 import Appreciation from '../components/blog/Appreciation.vue'
 
 const route = useRoute()
 const { locale, t } = useI18n()
+const { getPost } = useBlog()
 const { isTranslating, translateMarkdown } = useTranslation()
 
 const translatedContent = ref<string | null>(null)
@@ -19,7 +21,7 @@ const showTranslation = ref(false)
 const hasTranslationAvailable = ref(false)
 
 const post = computed(() => {
-  return posts.find(p => p.slug === route.params.slug)
+  return getPost(route.params.slug as string)
 })
 
 const title = computed(() => {

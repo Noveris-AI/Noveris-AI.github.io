@@ -4,25 +4,26 @@ import { useI18n } from 'vue-i18n'
 import { useHead } from '@vueuse/head'
 import DefaultLayout from '../layouts/DefaultLayout.vue'
 import BlogCard from '../components/blog/BlogCard.vue'
-import { categories, posts } from '../data/posts'
+import { useBlog } from '../composables/useBlog'
 
 const { t, locale } = useI18n()
+const { posts, categories, getCategoryPostsCount, isLoading } = useBlog()
 const selectedCategory = ref('all')
 
 const getCategoryPostCount = (categoryId: string) => {
-  return posts.filter(p => p.category === categoryId).length
+  return getCategoryPostsCount(categoryId) || posts.value.filter(p => p.category === categoryId).length
 }
 
 const filteredPosts = computed(() => {
   if (selectedCategory.value === 'all') {
-    return posts
+    return posts.value
   }
-  return posts.filter(post => post.category === selectedCategory.value)
+  return posts.value.filter(post => post.category === selectedCategory.value)
 })
 
 const currentCategory = computed(() => {
   if (selectedCategory.value === 'all') return null
-  return categories.find(c => c.id === selectedCategory.value)
+  return categories.value.find(c => c.id === selectedCategory.value)
 })
 
 // SEO Meta Tags
@@ -93,7 +94,10 @@ useHead({
     <!-- Posts Grid -->
     <section class="posts-section">
       <div class="container">
-        <div v-if="filteredPosts.length" class="posts-grid">
+        <div v-if="isLoading" class="loading-state">
+          <div class="spinner"></div>
+        </div>
+        <div v-else-if="filteredPosts.length" class="posts-grid">
           <BlogCard
             v-for="post in filteredPosts"
             :key="post.slug"
@@ -241,6 +245,26 @@ useHead({
   text-align: center;
   padding: 4rem 0;
   color: var(--text-secondary);
+}
+
+/* Loading State */
+.loading-state {
+  display: flex;
+  justify-content: center;
+  padding: 4rem 0;
+}
+
+.spinner {
+  width: 32px;
+  height: 32px;
+  border: 3px solid var(--border-color);
+  border-top-color: var(--accent-color);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
 }
 
 /* Transitions */
