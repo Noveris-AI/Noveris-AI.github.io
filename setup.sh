@@ -157,7 +157,7 @@ echo -e "${YELLOW}npm run build${NC}"
 echo ""
 echo -e "访问以下地址："
 echo -e "  博客首页: ${GREEN}http://localhost:5173${NC}"
-echo -e "  管理界面: ${GREEN}http://localhost:5173/admin${NC}"
+echo -e "  管理界面: ${GREEN}http://localhost:5173/admin/index.html${NC}"
 echo ""
 
 # 询问是否立即启动

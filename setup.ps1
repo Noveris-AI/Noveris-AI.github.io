@@ -123,7 +123,7 @@ Write-Host "访问以下地址："
 Write-Host "  博客首页: " -NoNewline
 Write-Host "http://localhost:5173" -ForegroundColor Green
 Write-Host "  管理界面: " -NoNewline
-Write-Host "http://localhost:5173/admin" -ForegroundColor Green
+Write-Host "http://localhost:5173/admin/index.html" -ForegroundColor Green
 Write-Host ""
 
 # 询问是否立即启动

@@ -149,7 +149,7 @@ cd /path/to/deploy/noveris-blog
 安装完成后，访问：
 
 - **博客首页**: http://localhost:5173
-- **管理界面**: http://localhost:5173/admin
+- **管理界面**: http://localhost:5173/admin/index.html
 
 ---
 
@@ -268,7 +268,7 @@ nvm use --lts
 
 安装完成后：
 
-1. 访问 http://localhost:5173/admin
+1. 访问 http://localhost:5173/admin/index.html
 2. 用 GitHub 登录
 3. 开始写你的第一篇文章！
 

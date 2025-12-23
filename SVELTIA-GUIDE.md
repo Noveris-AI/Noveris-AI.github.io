@@ -31,7 +31,7 @@ npm run dev
 
 #### 3. 访问管理界面
 
-打开浏览器访问：`http://localhost:5173/admin/`
+打开浏览器访问：`http://localhost:5173/admin/index.html`
 
 #### 4. 登录 GitHub
 
@@ -43,7 +43,7 @@ npm run dev
 
 ### 方式 1：通过管理界面（推荐）
 
-1. 访问 `http://localhost:5173/admin/`
+1. 访问 `http://localhost:5173/admin/index.html`
 2. 点击 **Posts** → **New Post**
 3. 填写：
    - 英文标题 / 中文标题
@@ -125,7 +125,7 @@ noveris-blog/
 
 部署到 GitHub Pages 后，可以直接在线管理：
 
-访问：`https://passion-lab.github.io/Noveris-Blogs/admin/`
+访问：`https://passion-lab.github.io/Noveris-Blogs/admin/index.html`
 
 **注意**：首次访问需要授权 GitHub OAuth。
 
@@ -213,7 +213,7 @@ npm run dev
 
 ## 🎯 下一步
 
-1. **写第一篇文章** - 访问 `/admin/` 开始
+1. **写第一篇文章** - 访问 `/admin/index.html` 开始
 2. **自定义样式** - 修改 `src/style.css`
 3. **添加功能** - 扩展 Vue 组件
 

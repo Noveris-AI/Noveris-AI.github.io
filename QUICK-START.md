@@ -10,19 +10,19 @@
 1. 解压文件到任意位置
 2. 双击 `setup.bat`（右键选择"以管理员身份运行"）
 3. 等待安装完成
-4. 访问 http://localhost:5173/admin **编辑博客**
+4. 访问 http://localhost:5173/admin/index.html **编辑博客**
 
 ### macOS 用户
 1. 解压文件到任意位置
 2. 打开终端（Terminal），cd 到项目目录
 3. 运行命令：`chmod +x setup.sh && ./setup.sh`
-4. 访问 http://localhost:5173/admin **编辑博客**
+4. 访问 http://localhost:5173/admin/index.html **编辑博客**
 
 ### Linux 用户
 1. 解压文件到任意位置
 2. 打开终端，cd 到项目目录
 3. 运行命令：`chmod +x setup.sh && ./setup.sh`
-4. 访问 http://localhost:5173/admin **编辑博客**
+4. 访问 http://localhost:5173/admin/index.html **编辑博客**
 
 ---
 
@@ -65,7 +65,7 @@
    ↓
 2. 运行安装脚本（setup.sh 或 setup.bat）
    ↓
-3. 访问 http://localhost:5173/admin
+3. 访问 http://localhost:5173/admin/index.html
    ↓
 4. 用 GitHub 账号登录（Noveris-AI 账号）
    ↓
@@ -88,7 +88,7 @@
 
 | 页面 | 地址 | 用途 |
 |------|------|------|
-| **管理后台** | http://localhost:5173/admin | ✍️ **编辑文章（主要使用）** |
+| **管理后台** | http://localhost:5173/admin/index.html | ✍️ **编辑文章（主要使用）** |
 | 博客预览 | http://localhost:5173 | 👀 预览博客效果 |
 | 线上博客 | https://noveris-ai.github.io | 🌐 公开访问的博客 |
 
@@ -213,7 +213,7 @@ git pull origin main
 # 回到家
 1. 解压项目（或 git pull）
 2. 运行 setup.sh
-3. 访问 /admin，继续编辑
+3. 访问 /admin/index.html，继续编辑
 4. 完成后发布
 ```
 
@@ -243,7 +243,7 @@ cd Noveris-AI.github.io
 
 # 通过 SSH 隧道访问
 # 在本地电脑：ssh -L 5173:localhost:5173 user@server
-# 然后访问 http://localhost:5173/admin
+# 然后访问 http://localhost:5173/admin/index.html
 ```
 
 ---
@@ -284,7 +284,7 @@ cd Noveris-AI.github.io
 一切准备就绪！现在：
 
 1. 运行安装脚本（setup.sh 或 setup.bat）
-2. 访问 http://localhost:5173/admin
+2. 访问 http://localhost:5173/admin/index.html
 3. 用你的 GitHub 账号登录
 4. 开始写作！
 
