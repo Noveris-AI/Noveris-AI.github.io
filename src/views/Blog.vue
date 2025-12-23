@@ -62,7 +62,7 @@ const filteredPosts = computed(() => {
               :class="['category-btn', { active: selectedCategory === category.id }]"
               @click="selectedCategory = category.id"
             >
-              {{ locale === 'zh' ? category.nameZh : category.name }}
+              {{ category.icon }} {{ locale === 'zh' ? category.nameZh : category.name }}
             </button>
           </div>
         </div>
@@ -131,7 +131,7 @@ const filteredPosts = computed(() => {
 .search-input:focus {
   outline: none;
   border-color: var(--accent-color);
-  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+  box-shadow: 0 0 0 3px rgba(13, 148, 136, 0.1);
 }
 
 .categories {

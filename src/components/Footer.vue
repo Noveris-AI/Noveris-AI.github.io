@@ -11,8 +11,8 @@ const currentYear = new Date().getFullYear()
       <div class="footer-content">
         <div class="footer-brand">
           <div class="logo">
-            <span class="logo-icon">N</span>
-            <span class="logo-text">Noveris AI</span>
+            <img src="/logo.svg" alt="Noveris" class="logo-icon" />
+            <span class="logo-text">Noveris</span>
           </div>
           <p class="footer-desc">{{ t('home.description') }}</p>
         </div>
@@ -30,7 +30,7 @@ const currentYear = new Date().getFullYear()
       </div>
 
       <div class="footer-bottom">
-        <p>&copy; {{ currentYear }} Noveris AI. {{ t('footer.rights') }}</p>
+        <p>&copy; {{ currentYear }} Noveris. {{ t('footer.rights') }}</p>
         <p class="powered-by">{{ t('footer.poweredBy') }}</p>
       </div>
     </div>
@@ -71,13 +71,13 @@ const currentYear = new Date().getFullYear()
 .logo-icon {
   width: 36px;
   height: 36px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: linear-gradient(135deg, #6366f1, #8b5cf6);
-  color: white;
-  border-radius: 8px;
-  font-weight: 800;
+}
+
+.logo-text {
+  background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .footer-desc {

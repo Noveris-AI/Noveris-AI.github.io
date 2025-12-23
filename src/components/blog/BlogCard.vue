@@ -29,7 +29,7 @@ const formattedDate = computed(() => {
 
 <template>
   <RouterLink :to="`/blog/${post.slug}`" class="blog-card">
-    <div class="card-image" :style="{ backgroundColor: post.color || '#6366f1' }">
+    <div class="card-image" :style="{ backgroundColor: post.color || '#0d9488' }">
       <span class="card-icon">{{ post.icon || '📝' }}</span>
     </div>
     <div class="card-content">
@@ -61,6 +61,7 @@ const formattedDate = computed(() => {
 .blog-card:hover {
   transform: translateY(-4px);
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  border-color: var(--accent-color);
 }
 
 .card-image {
@@ -87,10 +88,10 @@ const formattedDate = computed(() => {
 }
 
 .category {
-  background: var(--bg-secondary);
+  background: var(--accent-bg);
+  color: var(--accent-color);
   padding: 0.25rem 0.75rem;
   border-radius: 20px;
-  color: var(--text-secondary);
   font-weight: 500;
 }
 

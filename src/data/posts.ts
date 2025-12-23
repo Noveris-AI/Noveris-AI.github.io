@@ -17,28 +17,30 @@ export interface Category {
   id: string
   name: string
   nameZh: string
+  icon: string
+  color: string
 }
 
 export const categories: Category[] = [
-  { id: 'machine-learning', name: 'Machine Learning', nameZh: '机器学习' },
-  { id: 'deep-learning', name: 'Deep Learning', nameZh: '深度学习' },
-  { id: 'nlp', name: 'NLP', nameZh: '自然语言处理' },
-  { id: 'computer-vision', name: 'Computer Vision', nameZh: '计算机视觉' },
-  { id: 'tutorials', name: 'Tutorials', nameZh: '教程' }
+  { id: 'ai', name: 'Artificial Intelligence', nameZh: '人工智能', icon: '🤖', color: '#0d9488' },
+  { id: 'cloud-native', name: 'Cloud Native', nameZh: '云原生', icon: '☁️', color: '#0ea5e9' },
+  { id: 'development', name: 'Development', nameZh: '开发', icon: '💻', color: '#8b5cf6' },
+  { id: 'llm', name: 'Large Language Models', nameZh: '大语言模型', icon: '🧠', color: '#f59e0b' }
 ]
 
 export const posts: Post[] = [
+  // AI Posts
   {
     slug: 'introduction-to-transformers',
     title: 'Introduction to Transformer Architecture',
-    titleZh: 'Transformer架构入门',
+    titleZh: 'Transformer 架构入门',
     excerpt: 'A comprehensive guide to understanding the Transformer architecture that powers modern NLP models like GPT and BERT.',
-    excerptZh: '一份全面的指南，帮助你理解驱动GPT和BERT等现代NLP模型的Transformer架构。',
-    category: 'deep-learning',
+    excerptZh: '一份全面的指南, 帮助你理解驱动 GPT 和 BERT 等现代 NLP 模型的 Transformer 架构.',
+    category: 'ai',
     date: '2024-01-15',
     readTime: 10,
     icon: '🤖',
-    color: '#6366f1',
+    color: '#0d9488',
     content: `
 ## What is a Transformer?
 
@@ -47,9 +49,7 @@ The Transformer is a neural network architecture introduced in the paper "Attent
 ### Key Components
 
 1. **Self-Attention Mechanism**: Allows the model to weigh the importance of different parts of the input.
-
 2. **Multi-Head Attention**: Runs multiple attention operations in parallel.
-
 3. **Positional Encoding**: Adds information about the position of tokens in the sequence.
 
 ### Why Transformers?
@@ -70,23 +70,21 @@ model = BertModel.from_pretrained('bert-base-uncased')
 Transformers have revolutionized NLP and continue to drive advances in AI research.
     `,
     contentZh: `
-## 什么是Transformer?
+## 什么是 Transformer?
 
-Transformer是2017年Vaswani等人在论文"Attention Is All You Need"中提出的神经网络架构。它已成为现代NLP模型的基础。
+Transformer 是 2017 年 Vaswani 等人在论文 "Attention Is All You Need" 中提出的神经网络架构. 它已成为现代 NLP 模型的基础.
 
 ### 关键组件
 
-1. **自注意力机制**：允许模型权衡输入不同部分的重要性。
+1. **自注意力机制**: 允许模型权衡输入不同部分的重要性.
+2. **多头注意力**: 并行运行多个注意力操作.
+3. **位置编码**: 添加关于序列中标记位置的信息.
 
-2. **多头注意力**：并行运行多个注意力操作。
-
-3. **位置编码**：添加关于序列中标记位置的信息。
-
-### 为什么选择Transformer?
+### 为什么选择 Transformer?
 
 - 序列的并行处理
 - 更好地处理长距离依赖
-- 在许多NLP任务上达到最先进的性能
+- 在许多 NLP 任务上达到最先进的性能
 
 \`\`\`python
 import torch
@@ -97,128 +95,253 @@ model = BertModel.from_pretrained('bert-base-uncased')
 
 ### 结论
 
-Transformer已经彻底改变了NLP，并继续推动AI研究的进步。
+Transformer 已经彻底改变了 NLP, 并继续推动 AI 研究的进步.
     `
   },
+  // Cloud Native Posts
   {
-    slug: 'getting-started-with-pytorch',
-    title: 'Getting Started with PyTorch',
-    titleZh: 'PyTorch入门指南',
-    excerpt: 'Learn the basics of PyTorch, the popular deep learning framework used by researchers and practitioners.',
-    excerptZh: '学习PyTorch的基础知识，这是研究人员和从业者使用的流行深度学习框架。',
-    category: 'tutorials',
-    date: '2024-01-10',
-    readTime: 8,
-    icon: '🔥',
-    color: '#ef4444',
+    slug: 'kubernetes-basics',
+    title: 'Kubernetes Fundamentals: Getting Started',
+    titleZh: 'Kubernetes 基础: 入门指南',
+    excerpt: 'Learn the core concepts of Kubernetes, including pods, deployments, services, and how to orchestrate containers.',
+    excerptZh: '学习 Kubernetes 的核心概念, 包括 Pod, Deployment, Service 以及如何编排容器.',
+    category: 'cloud-native',
+    date: '2024-01-12',
+    readTime: 12,
+    icon: '☁️',
+    color: '#0ea5e9',
     content: `
-## Getting Started with PyTorch
+## What is Kubernetes?
 
-PyTorch is an open-source machine learning library developed by Facebook's AI Research lab.
+Kubernetes (K8s) is an open-source container orchestration platform that automates deploying, scaling, and managing containerized applications.
 
-### Installation
+### Core Concepts
+
+1. **Pods**: The smallest deployable unit in Kubernetes
+2. **Deployments**: Manage the desired state of your application
+3. **Services**: Expose your application to the network
+4. **ConfigMaps & Secrets**: Manage configuration and sensitive data
+
+### Basic Commands
 
 \`\`\`bash
-pip install torch torchvision
+# Get all pods
+kubectl get pods
+
+# Create a deployment
+kubectl create deployment nginx --image=nginx
+
+# Expose a deployment
+kubectl expose deployment nginx --port=80 --type=LoadBalancer
 \`\`\`
 
-### Basic Tensor Operations
+### Why Kubernetes?
 
-\`\`\`python
-import torch
-
-# Create a tensor
-x = torch.tensor([1, 2, 3, 4, 5])
-print(x)
-
-# Basic operations
-y = x + 10
-z = x * 2
-\`\`\`
-
-### Building a Simple Neural Network
-
-\`\`\`python
-import torch.nn as nn
-
-class SimpleNet(nn.Module):
-    def __init__(self):
-        super().__init__()
-        self.fc1 = nn.Linear(784, 128)
-        self.fc2 = nn.Linear(128, 10)
-
-    def forward(self, x):
-        x = torch.relu(self.fc1(x))
-        x = self.fc2(x)
-        return x
-\`\`\`
-
-### Next Steps
-
-- Explore autograd for automatic differentiation
-- Learn about DataLoaders for handling datasets
-- Experiment with pre-trained models
+- Automatic scaling and self-healing
+- Service discovery and load balancing
+- Rolling updates and rollbacks
+- Secret and configuration management
     `,
     contentZh: `
-## PyTorch入门
+## 什么是 Kubernetes?
 
-PyTorch是由Facebook AI Research实验室开发的开源机器学习库。
+Kubernetes (K8s) 是一个开源的容器编排平台, 可自动化部署, 扩展和管理容器化应用程序.
 
-### 安装
+### 核心概念
+
+1. **Pods**: Kubernetes 中最小的可部署单元
+2. **Deployments**: 管理应用程序的期望状态
+3. **Services**: 将应用程序暴露到网络
+4. **ConfigMaps & Secrets**: 管理配置和敏感数据
+
+### 基本命令
 
 \`\`\`bash
-pip install torch torchvision
+# 获取所有 pods
+kubectl get pods
+
+# 创建 deployment
+kubectl create deployment nginx --image=nginx
+
+# 暴露 deployment
+kubectl expose deployment nginx --port=80 --type=LoadBalancer
 \`\`\`
 
-### 基本张量操作
+### 为什么选择 Kubernetes?
 
-\`\`\`python
-import torch
+- 自动扩展和自愈
+- 服务发现和负载均衡
+- 滚动更新和回滚
+- 密钥和配置管理
+    `
+  },
+  // Development Posts
+  {
+    slug: 'clean-code-principles',
+    title: 'Clean Code Principles Every Developer Should Know',
+    titleZh: '每个开发者都应该知道的整洁代码原则',
+    excerpt: 'Master the art of writing clean, maintainable code with these essential principles and best practices.',
+    excerptZh: '掌握编写整洁, 可维护代码的艺术, 了解这些基本原则和最佳实践.',
+    category: 'development',
+    date: '2024-01-10',
+    readTime: 8,
+    icon: '💻',
+    color: '#8b5cf6',
+    content: `
+## Why Clean Code Matters
 
-# 创建张量
-x = torch.tensor([1, 2, 3, 4, 5])
-print(x)
+Clean code is not just about making code work; it's about making code that others (and your future self) can understand and maintain.
 
-# 基本操作
-y = x + 10
-z = x * 2
+### Key Principles
+
+1. **Meaningful Names**: Use intention-revealing names
+2. **Small Functions**: Functions should do one thing
+3. **DRY**: Don't Repeat Yourself
+4. **Comments**: Good code is self-documenting
+
+### Example
+
+\`\`\`typescript
+// Bad
+function d(a: number[]): number {
+  let t = 0;
+  for (let i = 0; i < a.length; i++) {
+    t += a[i];
+  }
+  return t;
+}
+
+// Good
+function calculateSum(numbers: number[]): number {
+  return numbers.reduce((total, num) => total + num, 0);
+}
 \`\`\`
 
-### 构建简单的神经网络
+### Remember
 
-\`\`\`python
-import torch.nn as nn
+> "Any fool can write code that a computer can understand. Good programmers write code that humans can understand." - Martin Fowler
+    `,
+    contentZh: `
+## 为什么整洁代码很重要
 
-class SimpleNet(nn.Module):
-    def __init__(self):
-        super().__init__()
-        self.fc1 = nn.Linear(784, 128)
-        self.fc2 = nn.Linear(128, 10)
+整洁代码不仅仅是让代码运行; 而是让其他人(以及未来的你)能够理解和维护代码.
 
-    def forward(self, x):
-        x = torch.relu(self.fc1(x))
-        x = self.fc2(x)
-        return x
+### 关键原则
+
+1. **有意义的命名**: 使用能揭示意图的名称
+2. **小函数**: 函数应该只做一件事
+3. **DRY**: 不要重复自己
+4. **注释**: 好的代码是自文档化的
+
+### 示例
+
+\`\`\`typescript
+// 不好
+function d(a: number[]): number {
+  let t = 0;
+  for (let i = 0; i < a.length; i++) {
+    t += a[i];
+  }
+  return t;
+}
+
+// 好
+function calculateSum(numbers: number[]): number {
+  return numbers.reduce((total, num) => total + num, 0);
+}
 \`\`\`
 
-### 下一步
+### 记住
 
-- 探索autograd进行自动微分
-- 学习DataLoaders处理数据集
-- 尝试预训练模型
+> "任何傻瓜都能写出计算机能理解的代码. 优秀的程序员写出人类能理解的代码." - Martin Fowler
+    `
+  },
+  // LLM Posts
+  {
+    slug: 'prompt-engineering-guide',
+    title: 'Prompt Engineering: A Practical Guide',
+    titleZh: '提示工程: 实用指南',
+    excerpt: 'Learn how to craft effective prompts for LLMs to get better results from ChatGPT, Claude, and other AI models.',
+    excerptZh: '学习如何为 LLM 编写有效的提示词, 从 ChatGPT, Claude 和其他 AI 模型获得更好的结果.',
+    category: 'llm',
+    date: '2024-01-08',
+    readTime: 15,
+    icon: '🧠',
+    color: '#f59e0b',
+    content: `
+## What is Prompt Engineering?
+
+Prompt engineering is the art and science of designing inputs for AI models to get desired outputs.
+
+### Key Techniques
+
+1. **Be Specific**: Clear instructions lead to better results
+2. **Provide Context**: Give the model relevant background
+3. **Use Examples**: Few-shot learning improves accuracy
+4. **Iterate**: Refine your prompts based on results
+
+### Example Prompts
+
+\`\`\`
+# Basic
+Summarize this article.
+
+# Better
+You are a technical writer. Summarize the following article in 3 bullet points, focusing on the key takeaways for software developers:
+
+[article content]
+\`\`\`
+
+### Advanced Techniques
+
+- Chain-of-thought prompting
+- Role-playing prompts
+- System prompts for context
+- Temperature and parameter tuning
+    `,
+    contentZh: `
+## 什么是提示工程?
+
+提示工程是为 AI 模型设计输入以获得期望输出的艺术和科学.
+
+### 关键技术
+
+1. **具体明确**: 清晰的指令带来更好的结果
+2. **提供上下文**: 给模型相关的背景信息
+3. **使用示例**: 少样本学习提高准确性
+4. **迭代改进**: 根据结果优化你的提示词
+
+### 示例提示词
+
+\`\`\`
+# 基础
+总结这篇文章.
+
+# 更好
+你是一名技术作家. 用 3 个要点总结以下文章, 重点关注对软件开发者的关键启示:
+
+[文章内容]
+\`\`\`
+
+### 高级技术
+
+- 思维链提示
+- 角色扮演提示
+- 系统提示提供上下文
+- 温度和参数调优
     `
   },
   {
     slug: 'understanding-gpt-models',
     title: 'Understanding GPT Models: From GPT-1 to GPT-4',
-    titleZh: '理解GPT模型：从GPT-1到GPT-4',
+    titleZh: '理解 GPT 模型: 从 GPT-1 到 GPT-4',
     excerpt: 'A deep dive into the evolution of GPT models and how they have transformed the AI landscape.',
-    excerptZh: '深入探讨GPT模型的演变以及它们如何改变AI格局。',
-    category: 'nlp',
+    excerptZh: '深入探讨 GPT 模型的演变以及它们如何改变 AI 格局.',
+    category: 'llm',
     date: '2024-01-05',
     readTime: 12,
-    icon: '💬',
-    color: '#10b981',
+    icon: '🧠',
+    color: '#f59e0b',
     content: `
 ## The Evolution of GPT
 
@@ -245,20 +368,20 @@ GPT (Generative Pre-trained Transformer) models have been at the forefront of AI
 The progression from GPT-1 to GPT-4 shows the power of scale and architectural improvements in AI.
     `,
     contentZh: `
-## GPT的演变
+## GPT 的演变
 
-GPT（生成式预训练Transformer）模型一直处于AI进步的前沿。
+GPT (生成式预训练 Transformer) 模型一直处于 AI 进步的前沿.
 
 ### GPT-1 (2018)
-- 1.17亿参数
+- 1.17 亿参数
 - 引入了无监督预训练的概念
 
 ### GPT-2 (2019)
-- 15亿参数
+- 15 亿参数
 - 展示了令人印象深刻的文本生成能力
 
 ### GPT-3 (2020)
-- 1750亿参数
+- 1750 亿参数
 - 引入了少样本学习
 
 ### GPT-4 (2023)
@@ -267,233 +390,93 @@ GPT（生成式预训练Transformer）模型一直处于AI进步的前沿。
 
 ### 关键要点
 
-从GPT-1到GPT-4的进展展示了规模和架构改进在AI中的力量。
+从 GPT-1 到 GPT-4 的进展展示了规模和架构改进在 AI 中的力量.
     `
   },
   {
-    slug: 'image-classification-cnn',
-    title: 'Image Classification with Convolutional Neural Networks',
-    titleZh: '使用卷积神经网络进行图像分类',
-    excerpt: 'Learn how to build and train a CNN for image classification tasks using Python and TensorFlow.',
-    excerptZh: '学习如何使用Python和TensorFlow构建和训练用于图像分类任务的CNN。',
-    category: 'computer-vision',
-    date: '2024-01-01',
-    readTime: 15,
-    icon: '👁️',
-    color: '#f59e0b',
+    slug: 'docker-for-developers',
+    title: 'Docker for Developers: A Complete Guide',
+    titleZh: 'Docker 开发者完全指南',
+    excerpt: 'Master Docker containers and learn how to streamline your development workflow with containerization.',
+    excerptZh: '掌握 Docker 容器, 学习如何通过容器化简化你的开发工作流.',
+    category: 'cloud-native',
+    date: '2024-01-03',
+    readTime: 10,
+    icon: '🐳',
+    color: '#0ea5e9',
     content: `
-## Image Classification with CNNs
+## Why Docker?
 
-Convolutional Neural Networks are the backbone of modern computer vision.
+Docker containers provide a consistent environment from development to production.
 
-### Architecture Components
+### Basic Commands
 
-1. **Convolutional Layers**: Extract features from images
-2. **Pooling Layers**: Reduce spatial dimensions
-3. **Fully Connected Layers**: Make final predictions
+\`\`\`bash
+# Build an image
+docker build -t myapp .
 
-### Building a CNN
+# Run a container
+docker run -p 3000:3000 myapp
 
-\`\`\`python
-import tensorflow as tf
-
-model = tf.keras.Sequential([
-    tf.keras.layers.Conv2D(32, (3, 3), activation='relu'),
-    tf.keras.layers.MaxPooling2D((2, 2)),
-    tf.keras.layers.Conv2D(64, (3, 3), activation='relu'),
-    tf.keras.layers.MaxPooling2D((2, 2)),
-    tf.keras.layers.Flatten(),
-    tf.keras.layers.Dense(64, activation='relu'),
-    tf.keras.layers.Dense(10, activation='softmax')
-])
+# List containers
+docker ps
 \`\`\`
 
-### Training Tips
+### Dockerfile Example
 
-- Use data augmentation
-- Apply batch normalization
-- Use learning rate scheduling
+\`\`\`dockerfile
+FROM node:18-alpine
+WORKDIR /app
+COPY package*.json ./
+RUN npm install
+COPY . .
+EXPOSE 3000
+CMD ["npm", "start"]
+\`\`\`
+
+### Best Practices
+
+- Use multi-stage builds
+- Keep images small
+- Don't run as root
+- Use .dockerignore
     `,
     contentZh: `
-## 使用CNN进行图像分类
+## 为什么选择 Docker?
 
-卷积神经网络是现代计算机视觉的支柱。
+Docker 容器提供了从开发到生产的一致环境.
 
-### 架构组件
+### 基本命令
 
-1. **卷积层**：从图像中提取特征
-2. **池化层**：减少空间维度
-3. **全连接层**：做出最终预测
+\`\`\`bash
+# 构建镜像
+docker build -t myapp .
 
-### 构建CNN
+# 运行容器
+docker run -p 3000:3000 myapp
 
-\`\`\`python
-import tensorflow as tf
-
-model = tf.keras.Sequential([
-    tf.keras.layers.Conv2D(32, (3, 3), activation='relu'),
-    tf.keras.layers.MaxPooling2D((2, 2)),
-    tf.keras.layers.Conv2D(64, (3, 3), activation='relu'),
-    tf.keras.layers.MaxPooling2D((2, 2)),
-    tf.keras.layers.Flatten(),
-    tf.keras.layers.Dense(64, activation='relu'),
-    tf.keras.layers.Dense(10, activation='softmax')
-])
+# 列出容器
+docker ps
 \`\`\`
 
-### 训练技巧
+### Dockerfile 示例
 
-- 使用数据增强
-- 应用批量归一化
-- 使用学习率调度
-    `
-  },
-  {
-    slug: 'reinforcement-learning-basics',
-    title: 'Reinforcement Learning: A Beginner\'s Guide',
-    titleZh: '强化学习：初学者指南',
-    excerpt: 'An introduction to reinforcement learning concepts including agents, environments, and reward functions.',
-    excerptZh: '介绍强化学习概念，包括智能体、环境和奖励函数。',
-    category: 'machine-learning',
-    date: '2023-12-28',
-    readTime: 11,
-    icon: '🎮',
-    color: '#8b5cf6',
-    content: `
-## Reinforcement Learning Basics
-
-Reinforcement Learning (RL) is a type of machine learning where an agent learns by interacting with an environment.
-
-### Key Concepts
-
-1. **Agent**: The learner/decision maker
-2. **Environment**: What the agent interacts with
-3. **State**: Current situation
-4. **Action**: What the agent can do
-5. **Reward**: Feedback from the environment
-
-### Q-Learning
-
-\`\`\`python
-import numpy as np
-
-# Initialize Q-table
-Q = np.zeros((n_states, n_actions))
-
-# Update rule
-Q[state, action] = Q[state, action] + alpha * (
-    reward + gamma * np.max(Q[next_state]) - Q[state, action]
-)
+\`\`\`dockerfile
+FROM node:18-alpine
+WORKDIR /app
+COPY package*.json ./
+RUN npm install
+COPY . .
+EXPOSE 3000
+CMD ["npm", "start"]
 \`\`\`
 
-### Applications
+### 最佳实践
 
-- Game playing (AlphaGo, Atari)
-- Robotics
-- Autonomous vehicles
-- Resource management
-    `,
-    contentZh: `
-## 强化学习基础
-
-强化学习（RL）是一种机器学习类型，智能体通过与环境交互来学习。
-
-### 关键概念
-
-1. **智能体**：学习者/决策者
-2. **环境**：智能体交互的对象
-3. **状态**：当前情况
-4. **动作**：智能体可以做什么
-5. **奖励**：来自环境的反馈
-
-### Q学习
-
-\`\`\`python
-import numpy as np
-
-# 初始化Q表
-Q = np.zeros((n_states, n_actions))
-
-# 更新规则
-Q[state, action] = Q[state, action] + alpha * (
-    reward + gamma * np.max(Q[next_state]) - Q[state, action]
-)
-\`\`\`
-
-### 应用
-
-- 游戏（AlphaGo、Atari）
-- 机器人技术
-- 自动驾驶车辆
-- 资源管理
-    `
-  },
-  {
-    slug: 'attention-mechanism-explained',
-    title: 'The Attention Mechanism Explained',
-    titleZh: '注意力机制详解',
-    excerpt: 'A detailed explanation of the attention mechanism and its role in modern deep learning models.',
-    excerptZh: '详细解释注意力机制及其在现代深度学习模型中的作用。',
-    category: 'deep-learning',
-    date: '2023-12-20',
-    readTime: 9,
-    icon: '🎯',
-    color: '#ec4899',
-    content: `
-## Understanding Attention
-
-Attention mechanisms allow models to focus on relevant parts of the input.
-
-### Self-Attention
-
-Self-attention computes relationships between all positions in a sequence.
-
-\`\`\`python
-def attention(Q, K, V):
-    d_k = Q.size(-1)
-    scores = torch.matmul(Q, K.transpose(-2, -1)) / math.sqrt(d_k)
-    attention_weights = F.softmax(scores, dim=-1)
-    return torch.matmul(attention_weights, V)
-\`\`\`
-
-### Multi-Head Attention
-
-Multiple attention heads allow the model to attend to information from different representation subspaces.
-
-### Applications
-
-- Machine Translation
-- Text Summarization
-- Image Captioning
-- Speech Recognition
-    `,
-    contentZh: `
-## 理解注意力机制
-
-注意力机制允许模型专注于输入的相关部分。
-
-### 自注意力
-
-自注意力计算序列中所有位置之间的关系。
-
-\`\`\`python
-def attention(Q, K, V):
-    d_k = Q.size(-1)
-    scores = torch.matmul(Q, K.transpose(-2, -1)) / math.sqrt(d_k)
-    attention_weights = F.softmax(scores, dim=-1)
-    return torch.matmul(attention_weights, V)
-\`\`\`
-
-### 多头注意力
-
-多个注意力头允许模型关注来自不同表示子空间的信息。
-
-### 应用
-
-- 机器翻译
-- 文本摘要
-- 图像描述
-- 语音识别
+- 使用多阶段构建
+- 保持镜像小巧
+- 不要以 root 用户运行
+- 使用 .dockerignore
     `
   }
 ]

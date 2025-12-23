@@ -16,15 +16,15 @@ const toggleLocale = () => {
   <header class="header">
     <div class="container">
       <RouterLink to="/" class="logo">
-        <span class="logo-icon">N</span>
-        <span class="logo-text">Noveris AI</span>
+        <img src="/logo.svg" alt="Noveris" class="logo-icon" />
+        <span class="logo-text">Noveris</span>
       </RouterLink>
 
       <nav class="nav">
         <RouterLink to="/" class="nav-link">{{ t('nav.home') }}</RouterLink>
         <RouterLink to="/blog" class="nav-link">{{ t('nav.blog') }}</RouterLink>
+        <RouterLink to="/categories" class="nav-link">{{ t('nav.categories') }}</RouterLink>
         <RouterLink to="/about" class="nav-link">{{ t('nav.about') }}</RouterLink>
-        <RouterLink to="/contact" class="nav-link">{{ t('nav.contact') }}</RouterLink>
       </nav>
 
       <div class="header-actions">
@@ -73,13 +73,13 @@ const toggleLocale = () => {
 .logo-icon {
   width: 36px;
   height: 36px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: linear-gradient(135deg, #6366f1, #8b5cf6);
-  color: white;
-  border-radius: 8px;
-  font-weight: 800;
+}
+
+.logo-text {
+  background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .nav {
@@ -111,7 +111,7 @@ const toggleLocale = () => {
   display: flex;
   align-items: center;
   justify-content: center;
-  border: none;
+  border: 1px solid var(--border-color);
   background: var(--bg-secondary);
   color: var(--text-primary);
   border-radius: 8px;
@@ -123,6 +123,7 @@ const toggleLocale = () => {
 
 .action-btn:hover {
   background: var(--bg-tertiary);
+  border-color: var(--accent-color);
 }
 
 @media (max-width: 768px) {
