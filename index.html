@@ -6,6 +6,10 @@
     <link rel="icon" href="/logo.svg" type="image/svg+xml" />
     <link rel="apple-touch-icon" href="/logo.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="build-version" content="v2.0-20241224" />
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
     <meta name="description" content="Noveris - Passion's technical blog covering AI, Cloud Native, Development, and LLM topics." />
     <meta name="keywords" content="AI, artificial intelligence, cloud native, kubernetes, docker, LLM, development, programming" />
     <meta name="author" content="Liu Yaojie (Passion)" />
@@ -48,17 +52,44 @@
         }, 1000);
       });
 
+      // Track failed resources to prevent infinite reload loops
+      var failedResources = [];
+      var reloadAttempts = parseInt(sessionStorage.getItem('reloadAttempts') || '0');
+      var maxReloadAttempts = 1;
+
       // Detect script loading failures
       window.addEventListener('error', function(e) {
         if (e.target.tagName === 'SCRIPT' || e.target.tagName === 'LINK') {
-          console.error('Resource failed to load:', e.target.src || e.target.href);
-          // Show error message
+          var failedUrl = e.target.src || e.target.href;
+          console.error('Resource failed to load:', failedUrl);
+          failedResources.push(failedUrl);
+
+          // Auto-retry with cache bypass on first failure
+          if (reloadAttempts < maxReloadAttempts) {
+            reloadAttempts++;
+            sessionStorage.setItem('reloadAttempts', reloadAttempts.toString());
+            console.log('Attempting cache-busting reload (attempt ' + reloadAttempts + ')...');
+            setTimeout(function() {
+              window.location.href = window.location.href.split('?')[0] + '?v=' + Date.now();
+            }, 500);
+            return;
+          }
+
+          // Clear retry counter after showing error
+          sessionStorage.removeItem('reloadAttempts');
+
+          // Show error message after retry failed
           var loading = document.getElementById('app-loading');
           if (loading) {
-            loading.innerHTML = '<div style="text-align: center; padding: 2rem;"><h2 style="color: #ef4444; margin-bottom: 1rem;">⚠️ Loading Error</h2><p style="color: #64748b; margin-bottom: 1rem;">Failed to load required resources.</p><p style="color: #64748b; margin-bottom: 1rem;">This may be due to network issues or cached content.</p><button onclick="location.reload()" style="padding: 0.5rem 1rem; background: #0d9488; color: white; border: none; border-radius: 0.375rem; cursor: pointer; font-size: 0.875rem;">Reload Page</button><br><br><a href="/" style="color: #0d9488; text-decoration: none; font-size: 0.875rem;">← Back to Home</a></div>';
+            loading.innerHTML = '<div style="text-align: center; padding: 2rem;"><h2 style="color: #ef4444; margin-bottom: 1rem;">⚠️ Loading Error</h2><p style="color: #64748b; margin-bottom: 1rem;">Failed to load required resources.</p><p style="color: #94a3b8; font-size: 0.875rem; margin-bottom: 1rem;">This is likely due to cached content. Try hard refresh:</p><div style="display: flex; gap: 0.75rem; justify-content: center; flex-wrap: wrap; margin-bottom: 1rem;"><button onclick="sessionStorage.removeItem(\'reloadAttempts\'); window.location.href = window.location.href.split(\'?\')[0] + \'?v=\' + Date.now()" style="padding: 0.5rem 1rem; background: #0d9488; color: white; border: none; border-radius: 0.375rem; cursor: pointer; font-size: 0.875rem; font-weight: 500;">Clear Cache & Reload</button><button onclick="sessionStorage.removeItem(\'reloadAttempts\'); window.location.reload(true)" style="padding: 0.5rem 1rem; background: #64748b; color: white; border: none; border-radius: 0.375rem; cursor: pointer; font-size: 0.875rem;">Force Refresh</button></div><p style="color: #94a3b8; font-size: 0.75rem; margin-top: 1rem;">Or press: <kbd style="background: #f1f5f9; padding: 0.25rem 0.5rem; border-radius: 0.25rem; font-family: monospace;">Ctrl+Shift+R</kbd> (Windows) / <kbd style="background: #f1f5f9; padding: 0.25rem 0.5rem; border-radius: 0.25rem; font-family: monospace;">Cmd+Shift+R</kbd> (Mac)</p><br><a href="/" onclick="sessionStorage.removeItem(\'reloadAttempts\')" style="color: #0d9488; text-decoration: none; font-size: 0.875rem;">← Back to Home</a></div>';
           }
         }
       }, true);
+
+      // Clear reload counter on successful load
+      window.addEventListener('load', function() {
+        sessionStorage.removeItem('reloadAttempts');
+      });
     </script>
 
     <style>
