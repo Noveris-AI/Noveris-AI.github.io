@@ -10,18 +10,34 @@ backend:
 media_folder: public/images/posts
 public_folder: /images/posts
 
+# 国际化设置
+locale: zh-CN
+locales:
+  - label: 简体中文
+    code: zh-CN
+  - label: English
+    code: en
+
+# 显示设置
+display_url: https://noveris-ai.github.io
+logo_url: https://noveris-ai.github.io/logo.svg
+
 # 编辑器设置
 slug:
   encoding: ascii
   clean_accents: true
   sanitize_replacement: "-"
 
+# 编辑器增强
+editor:
+  preview: true
+
 # 内容集合
 collections:
   # 分类
   - name: categories
-    label: Categories
-    label_singular: Category
+    label: "分类 / Categories"
+    label_singular: "分类 / Category"
     folder: content/categories
     create: true
     slug: "{{slug}}"
@@ -29,31 +45,31 @@ collections:
     extension: json
     format: json
     fields:
-      - { label: "Name (English)", name: "name", widget: "string" }
-      - { label: "Name (Chinese)", name: "nameZh", widget: "string" }
-      - { label: "Slug", name: "slug", widget: "string" }
-      - { label: "Icon (Emoji)", name: "icon", widget: "string" }
-      - { label: "Color", name: "color", widget: "color", default: "#0d9488" }
+      - { label: "英文名称 / Name (English)", name: "name", widget: "string" }
+      - { label: "中文名称 / Name (Chinese)", name: "nameZh", widget: "string" }
+      - { label: "URL 标识 / Slug", name: "slug", widget: "string" }
+      - { label: "图标 (Emoji) / Icon (Emoji)", name: "icon", widget: "string" }
+      - { label: "颜色 / Color", name: "color", widget: "color", default: "#0d9488" }
 
   # 文章
   - name: posts
-    label: Posts
-    label_singular: Post
+    label: "文章 / Posts"
+    label_singular: "文章 / Post"
     folder: content/posts
     create: true
     slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
     extension: md
     format: frontmatter
     fields:
-      - { label: "Title (English)", name: "title", widget: "string" }
-      - { label: "Title (Chinese)", name: "titleZh", widget: "string" }
-      - { label: "Slug", name: "slug", widget: "string" }
-      - { label: "Excerpt (English)", name: "excerpt", widget: "text" }
-      - { label: "Excerpt (Chinese)", name: "excerptZh", widget: "text" }
-      - { label: "Content (English)", name: "content", widget: "markdown" }
-      - { label: "Content (Chinese)", name: "contentZh", widget: "markdown" }
-      - { label: "Category", name: "category", widget: "relation", collection: "categories", search_fields: ["name"], value_field: "slug", display_fields: ["name"] }
-      - { label: "Cover Image", name: "cover", widget: "image", required: false }
-      - { label: "Read Time (minutes)", name: "readTime", widget: "number", default: 5, value_type: "int" }
-      - { label: "Published Date", name: "publishedAt", widget: "datetime", format: "YYYY-MM-DDTHH:mm:ssZ", default: "" }
-      - { label: "Likes", name: "likes", widget: "number", default: 0, value_type: "int", required: false }
+      - { label: "英文标题 / Title (English)", name: "title", widget: "string" }
+      - { label: "中文标题 / Title (Chinese)", name: "titleZh", widget: "string" }
+      - { label: "URL 标识 / Slug", name: "slug", widget: "string" }
+      - { label: "英文摘要 / Excerpt (English)", name: "excerpt", widget: "text" }
+      - { label: "中文摘要 / Excerpt (Chinese)", name: "excerptZh", widget: "text" }
+      - { label: "英文内容 / Content (English)", name: "content", widget: "markdown" }
+      - { label: "中文内容 / Content (Chinese)", name: "contentZh", widget: "markdown" }
+      - { label: "分类 / Category", name: "category", widget: "relation", collection: "categories", search_fields: ["name"], value_field: "slug", display_fields: ["name"] }
+      - { label: "封面图 / Cover Image", name: "cover", widget: "image", required: false }
+      - { label: "阅读时长（分钟）/ Read Time (minutes)", name: "readTime", widget: "number", default: 5, value_type: "int" }
+      - { label: "发布日期 / Published Date", name: "publishedAt", widget: "datetime", format: "YYYY-MM-DDTHH:mm:ssZ", default: "" }
+      - { label: "点赞数 / Likes", name: "likes", widget: "number", default: 0, value_type: "int", required: false }
