@@ -1,7 +1,7 @@
 // Service Worker for Noveris Blog
 // 企业级缓存策略和离线支持
 
-const CACHE_VERSION = 'v2.1-20241224';
+const CACHE_VERSION = 'v2.2-20241224-2'; // 强制清除所有缓存
 const CACHE_NAME = `noveris-blog-${CACHE_VERSION}`;
 
 // 需要预缓存的核心资源

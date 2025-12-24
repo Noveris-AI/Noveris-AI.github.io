@@ -13,10 +13,11 @@
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#0d9488" />
-    <meta name="build-version" content="v2.0-20241224" />
-    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta name="build-version" content="v2.2-20241224-fix" />
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate, proxy-revalidate" />
     <meta http-equiv="Pragma" content="no-cache" />
     <meta http-equiv="Expires" content="0" />
+    <meta name="last-updated" content="2025-12-24T14:00:00Z" />
     <meta name="description" content="Noveris - Passion's technical blog covering AI, Cloud Native, Development, and LLM topics." />
     <meta name="keywords" content="AI, artificial intelligence, cloud native, kubernetes, docker, LLM, development, programming" />
     <meta name="author" content="Liu Yaojie (Passion)" />
@@ -107,39 +108,61 @@
 
     <!-- Service Worker Registration -->
     <script>
+      // 立即检查并清除旧缓存
+      if ('caches' in window) {
+        caches.keys().then(function(cacheNames) {
+          return Promise.all(
+            cacheNames.map(function(cacheName) {
+              // 清除所有不是当前版本的缓存
+              if (cacheName.includes('noveris-blog-') && !cacheName.includes('v2.2-20241224-2')) {
+                console.log('[Cache] Clearing old cache:', cacheName);
+                return caches.delete(cacheName);
+              }
+            })
+          );
+        });
+      }
+
       // 企业级 Service Worker 注册和管理
       if ('serviceWorker' in navigator) {
         window.addEventListener('load', function() {
-          navigator.serviceWorker.register('/sw.js')
-            .then(function(registration) {
-              console.log('[SW] Service Worker registered successfully:', registration.scope);
+          // 首先注销所有旧的 Service Workers
+          navigator.serviceWorker.getRegistrations().then(function(registrations) {
+            for(let registration of registrations) {
+              console.log('[SW] Unregistering old service worker');
+              registration.unregister();
+            }
+          }).then(function() {
+            // 注册新的 Service Worker
+            return navigator.serviceWorker.register('/sw.js');
+          }).then(function(registration) {
+            console.log('[SW] Service Worker registered successfully:', registration.scope);
 
-              // 监听 Service Worker 更新
-              registration.addEventListener('updatefound', function() {
-                const newWorker = registration.installing;
-                console.log('[SW] New service worker found, installing...');
+            // 监听 Service Worker 更新
+            registration.addEventListener('updatefound', function() {
+              const newWorker = registration.installing;
+              console.log('[SW] New service worker found, installing...');
 
-                newWorker.addEventListener('statechange', function() {
-                  if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-                    console.log('[SW] New content available, prompting user...');
-                    // 新版本可用，提示用户刷新
-                    if (confirm('网站有新版本可用，是否立即更新？\n\nA new version is available. Update now?')) {
-                      newWorker.postMessage({ type: 'SKIP_WAITING' });
-                      window.location.reload(true);
-                    }
+              newWorker.addEventListener('statechange', function() {
+                if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                  console.log('[SW] New content available, prompting user...');
+                  // 新版本可用，提示用户刷新
+                  if (confirm('网站有新版本可用，是否立即更新？\n\nA new version is available. Update now?')) {
+                    newWorker.postMessage({ type: 'SKIP_WAITING' });
+                    window.location.reload(true);
                   }
-                });
+                }
               });
-
-              // 监听控制器变更（Service Worker 激活）
-              navigator.serviceWorker.addEventListener('controllerchange', function() {
-                console.log('[SW] Controller changed, reloading page...');
-                window.location.reload(true);
-              });
-            })
-            .catch(function(error) {
-              console.error('[SW] Service Worker registration failed:', error);
             });
+
+            // 监听控制器变更（Service Worker 激活）
+            navigator.serviceWorker.addEventListener('controllerchange', function() {
+              console.log('[SW] Controller changed, reloading page...');
+              window.location.reload(true);
+            });
+          }).catch(function(error) {
+            console.error('[SW] Service Worker registration failed:', error);
+          });
 
           // 监听来自 Service Worker 的消息
           navigator.serviceWorker.addEventListener('message', function(event) {
@@ -152,21 +175,37 @@
 
       // 添加全局缓存清除函数（用于调试）
       window.clearAppCache = function() {
+        console.log('[Cache] Clearing all caches...');
+
+        // 清除所有缓存
+        if ('caches' in window) {
+          caches.keys().then(function(names) {
+            return Promise.all(
+              names.map(function(name) {
+                console.log('[Cache] Deleting cache:', name);
+                return caches.delete(name);
+              })
+            );
+          }).then(function() {
+            console.log('[Cache] All caches cleared');
+          });
+        }
+
+        // 注销 Service Worker
         if ('serviceWorker' in navigator) {
-          navigator.serviceWorker.controller.postMessage({ type: 'CLEAR_CACHE' });
-          // 同时清除浏览器缓存
-          if ('caches' in window) {
-            caches.keys().then(function(names) {
-              names.forEach(function(name) {
-                caches.delete(name);
-              });
-            }).then(function() {
-              console.log('[Cache] All caches cleared, reloading...');
-              window.location.reload(true);
-            });
-          }
+          navigator.serviceWorker.getRegistrations().then(function(registrations) {
+            return Promise.all(
+              registrations.map(function(registration) {
+                console.log('[SW] Unregistering service worker');
+                return registration.unregister();
+              })
+            );
+          }).then(function() {
+            console.log('[SW] All service workers unregistered');
+            console.log('[Cache] Force reloading...');
+            window.location.reload(true);
+          });
         } else {
-          // 强制刷新
           window.location.reload(true);
         }
       };
@@ -183,6 +222,16 @@
           return null;
         }
       };
+
+      // 自动检测版本不匹配并清除缓存
+      window.addEventListener('load', function() {
+        const expectedVersion = 'v2.2-20241224-fix';
+        const metaVersion = document.querySelector('meta[name="build-version"]');
+        if (metaVersion && metaVersion.content !== expectedVersion) {
+          console.warn('[Version] Mismatch detected, clearing cache...');
+          window.clearAppCache();
+        }
+      });
     </script>
 
     <script type="module" src="/src/main.ts"></script>
