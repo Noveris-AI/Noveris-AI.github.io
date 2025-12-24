@@ -5,20 +5,9 @@ backend:
   base_url: https://noveris-blog-auth.vercel.app
   auth_endpoint: /api/auth
 
-# 本地测试模式（可选）
-# local_backend: true
-
 # 媒体文件存储
 media_folder: public/images/posts
 public_folder: /images/posts
-
-# 国际化设置
-locale: zh-CN
-locales:
-  - label: 简体中文
-    code: zh-CN
-  - label: English
-    code: en
 
 # 显示设置
 display_url: https://noveris-ai.github.io

@@ -1,79 +1,30 @@
-// Composable for fetching and managing blog data from Strapi
-import { ref, onMounted, onUnmounted, computed } from 'vue'
-import {
-  getPosts,
-  getPostBySlug,
-  getCategories,
-  getPostsCountByCategory,
-  transformPost,
-  transformCategory,
-  startPolling,
-  stopPolling,
-  onPostsUpdate
-} from '../services/strapi'
+// Composable for fetching and managing blog data
+import { ref, onMounted, computed } from 'vue'
+import { categories as staticCategories, posts as staticPosts } from '../data/posts'
 import type { Post, Category } from '../data/posts'
-import { categories as staticCategories } from '../data/posts'
 
 // Reactive state (shared across components)
-const posts = ref<Post[]>([])
-const categories = ref<Category[]>(staticCategories) // Use static as default
+const posts = ref<Post[]>(staticPosts) // Use static posts as default
+const categories = ref<Category[]>(staticCategories)
 const postsCountByCategory = ref<Record<string, number>>({})
 const isLoading = ref(false)
 const error = ref<string | null>(null)
-const isInitialized = ref(false)
+const isInitialized = ref(true) // Already initialized with static data
 
-// Fetch all data
-const fetchAllData = async () => {
-  isLoading.value = true
-  error.value = null
-
-  try {
-    const [postsResponse, categoriesResponse, countsResponse] = await Promise.all([
-      getPosts({ pageSize: 100 }),
-      getCategories(),
-      getPostsCountByCategory()
-    ])
-
-    posts.value = postsResponse.data.map(transformPost)
-    // Only update categories if we got data from Strapi
-    if (categoriesResponse.data.length > 0) {
-      categories.value = categoriesResponse.data.map(transformCategory)
-    }
-    postsCountByCategory.value = countsResponse
-    isInitialized.value = true
-  } catch (err) {
-    error.value = err instanceof Error ? err.message : 'Failed to fetch data'
-    console.error('Failed to fetch blog data:', err)
-  } finally {
-    isLoading.value = false
-  }
+// Calculate posts count by category
+const updatePostsCounts = () => {
+  const counts: Record<string, number> = {}
+  categories.value.forEach(cat => {
+    counts[cat.id] = posts.value.filter(p => p.category === cat.id).length
+  })
+  postsCountByCategory.value = counts
 }
+
+// Initialize counts
+updatePostsCounts()
 
 // Main composable
 export function useBlog() {
-  let unsubscribe: (() => void) | null = null
-
-  // Initialize data on first use
-  onMounted(() => {
-    if (!isInitialized.value) {
-      fetchAllData()
-    }
-
-    // Start polling for real-time updates
-    startPolling(30000) // Check every 30 seconds
-
-    // Subscribe to updates
-    unsubscribe = onPostsUpdate(() => {
-      fetchAllData()
-    })
-  })
-
-  onUnmounted(() => {
-    if (unsubscribe) {
-      unsubscribe()
-    }
-  })
-
   // Computed: Latest posts
   const latestPosts = computed(() => {
     return posts.value.slice(0, 5)
@@ -116,9 +67,10 @@ export function useBlog() {
     return postsCountByCategory.value[categorySlug] || 0
   }
 
-  // Refresh data
-  const refresh = () => {
-    return fetchAllData()
+  // Refresh data (for future CMS integration)
+  const refresh = async () => {
+    // TODO: Fetch from CMS when needed
+    updatePostsCounts()
   }
 
   return {
@@ -148,51 +100,27 @@ export function usePost(slug: string) {
   const post = ref<Post | null>(null)
   const isLoading = ref(true)
   const error = ref<string | null>(null)
-  let unsubscribe: (() => void) | null = null
-
-  const fetchPost = async () => {
-    isLoading.value = true
-    error.value = null
-
-    try {
-      const response = await getPostBySlug(slug)
-      const postData = response.data[0]
-      if (postData) {
-        post.value = transformPost(postData)
-      } else {
-        error.value = 'Post not found'
-      }
-    } catch (err) {
-      error.value = err instanceof Error ? err.message : 'Failed to fetch post'
-    } finally {
-      isLoading.value = false
-    }
-  }
 
   onMounted(() => {
-    fetchPost()
-
-    // Subscribe to updates for this post
-    unsubscribe = onPostsUpdate(() => {
-      fetchPost()
-    })
-  })
-
-  onUnmounted(() => {
-    if (unsubscribe) {
-      unsubscribe()
+    // Find post from static data
+    const foundPost = staticPosts.find(p => p.slug === slug)
+    if (foundPost) {
+      post.value = foundPost
+    } else {
+      error.value = 'Post not found'
     }
+    isLoading.value = false
   })
 
   return {
     post,
     isLoading,
     error,
-    refresh: fetchPost
+    refresh: async () => {}
   }
 }
 
-// Stop polling when app unmounts (call in App.vue)
+// Cleanup function (no-op for static data)
 export function cleanupBlog() {
-  stopPolling()
+  // No cleanup needed for static data
 }
