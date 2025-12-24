@@ -1,0 +1,92 @@
+# 企业级缓存策略 - Noveris Blog
+# 确保内容更新能够立即生效，同时优化性能
+
+# HTML 文件 - 永远不缓存，确保更新立即生效
+/*.html
+  Cache-Control: no-cache, no-store, must-revalidate, max-age=0
+  Pragma: no-cache
+  Expires: 0
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: SAMEORIGIN
+  X-XSS-Protection: 1; mode=block
+  Referrer-Policy: strict-origin-when-cross-origin
+
+# 根目录 HTML
+/
+  Cache-Control: no-cache, no-store, must-revalidate, max-age=0
+  Pragma: no-cache
+  Expires: 0
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: SAMEORIGIN
+  X-XSS-Protection: 1; mode=block
+
+# JavaScript 和 CSS - 长期缓存（因为文件名包含 hash）
+/assets/*.js
+  Cache-Control: public, max-age=31536000, immutable
+  X-Content-Type-Options: nosniff
+
+/assets/*.css
+  Cache-Control: public, max-age=31536000, immutable
+  X-Content-Type-Options: nosniff
+
+/assets/styles/*.css
+  Cache-Control: public, max-age=31536000, immutable
+  X-Content-Type-Options: nosniff
+
+# 图片资源 - 长期缓存
+/assets/images/*
+  Cache-Control: public, max-age=31536000, immutable
+  X-Content-Type-Options: nosniff
+
+/images/*
+  Cache-Control: public, max-age=2592000
+  X-Content-Type-Options: nosniff
+
+# 字体文件 - 长期缓存
+/assets/fonts/*
+  Cache-Control: public, max-age=31536000, immutable
+  X-Content-Type-Options: nosniff
+
+# SVG 文件 - 适中缓存
+*.svg
+  Cache-Control: public, max-age=86400
+  X-Content-Type-Options: nosniff
+
+# Favicon 和 Manifest - 适中缓存
+/favicon.*
+  Cache-Control: public, max-age=86400
+  X-Content-Type-Options: nosniff
+
+/logo.svg
+  Cache-Control: public, max-age=86400
+  X-Content-Type-Options: nosniff
+
+/manifest.json
+  Cache-Control: public, max-age=86400
+  Content-Type: application/manifest+json
+  X-Content-Type-Options: nosniff
+
+# Service Worker - 永远不缓存
+/sw.js
+  Cache-Control: no-cache, no-store, must-revalidate, max-age=0
+  Content-Type: application/javascript
+  X-Content-Type-Options: nosniff
+
+# CMS Admin - 不缓存
+/admin/*
+  Cache-Control: no-cache, no-store, must-revalidate, max-age=0
+  X-Frame-Options: SAMEORIGIN
+  X-Content-Type-Options: nosniff
+
+# 健康检查端点 - 不缓存
+/health.json
+  Cache-Control: no-cache, no-store, must-revalidate, max-age=0
+  Content-Type: application/json
+  Access-Control-Allow-Origin: *
+  X-Content-Type-Options: nosniff
+
+# 构建信息 - 不缓存
+/build-info.txt
+  Cache-Control: no-cache, no-store, must-revalidate, max-age=0
+  Content-Type: text/plain
+  X-Content-Type-Options: nosniff

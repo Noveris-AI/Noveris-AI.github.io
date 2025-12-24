@@ -12,7 +12,7 @@ export default defineConfig({
     }
   },
   build: {
-    outDir: 'dist',
+    outDir: 'docs',  // GitHub Pages for user sites can use docs/ folder
     assetsDir: 'assets',
     sourcemap: false,
     minify: 'esbuild',
