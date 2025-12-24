@@ -37,9 +37,36 @@ jobs:
         run: |
           cp dist/index.html dist/404.html
           touch dist/.nojekyll
-          echo "Build completed at $(date)" > dist/build-info.txt
+
+          # 生成详细的构建信息
+          echo "Build completed at $(date -u +"%Y-%m-%dT%H:%M:%SZ")" > dist/build-info.txt
           echo "Commit: ${{ github.sha }}" >> dist/build-info.txt
+          echo "Commit Message: $(git log -1 --pretty=%B)" >> dist/build-info.txt
           echo "Build number: ${{ github.run_number }}" >> dist/build-info.txt
+          echo "Branch: ${{ github.ref_name }}" >> dist/build-info.txt
+          echo "Triggered by: ${{ github.event_name }}" >> dist/build-info.txt
+          echo "Repository: ${{ github.repository }}" >> dist/build-info.txt
+
+          # 更新健康检查文件的时间戳
+          if [ -f dist/health.json ]; then
+            sed -i.bak "s/\"timestamp\": \"[^\"]*\"/\"timestamp\": \"$(date -u +"%Y-%m-%dT%H:%M:%SZ")\"/" dist/health.json
+            rm dist/health.json.bak 2>/dev/null || true
+          fi
+
+          # 验证关键文件存在
+          echo "Verifying build output..."
+          test -f dist/index.html || (echo "ERROR: index.html not found" && exit 1)
+          test -f dist/manifest.json || (echo "ERROR: manifest.json not found" && exit 1)
+          test -f dist/sw.js || (echo "ERROR: sw.js not found" && exit 1)
+          test -f dist/health.json || (echo "ERROR: health.json not found" && exit 1)
+
+          # 列出构建输出
+          echo "Build output files:"
+          ls -lah dist/
+          echo "Assets:"
+          ls -lah dist/assets/ | head -20
+
+          echo "Build verification completed successfully"
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
@@ -59,3 +86,45 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+
+      - name: Wait for deployment to propagate
+        run: |
+          echo "Waiting 30 seconds for CDN to propagate..."
+          sleep 30
+
+      - name: Verify deployment
+        run: |
+          echo "Verifying deployment at ${{ steps.deployment.outputs.page_url }}"
+
+          # 检查主页
+          HTTP_STATUS=$(curl -s -o /dev/null -w "%{http_code}" "${{ steps.deployment.outputs.page_url }}")
+          echo "Main page HTTP status: $HTTP_STATUS"
+
+          if [ "$HTTP_STATUS" != "200" ]; then
+            echo "ERROR: Main page returned $HTTP_STATUS"
+            exit 1
+          fi
+
+          # 检查健康检查端点
+          HEALTH_URL="${{ steps.deployment.outputs.page_url }}health.json"
+          echo "Checking health endpoint: $HEALTH_URL"
+          HEALTH_STATUS=$(curl -s -o /dev/null -w "%{http_code}" "$HEALTH_URL")
+          echo "Health endpoint HTTP status: $HEALTH_STATUS"
+
+          if [ "$HEALTH_STATUS" = "200" ]; then
+            curl -s "$HEALTH_URL" | jq '.'
+          else
+            echo "WARNING: Health endpoint returned $HEALTH_STATUS"
+          fi
+
+          # 检查 Service Worker
+          SW_URL="${{ steps.deployment.outputs.page_url }}sw.js"
+          echo "Checking Service Worker: $SW_URL"
+          SW_STATUS=$(curl -s -o /dev/null -w "%{http_code}" "$SW_URL")
+          echo "Service Worker HTTP status: $SW_STATUS"
+
+          if [ "$SW_STATUS" != "200" ]; then
+            echo "WARNING: Service Worker returned $SW_STATUS"
+          fi
+
+          echo "Deployment verification completed"

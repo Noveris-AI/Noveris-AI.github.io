@@ -1,0 +1,26 @@
+{
+  "status": "healthy",
+  "service": "Noveris Blog",
+  "version": "2.1",
+  "timestamp": "2024-12-24T00:00:00Z",
+  "components": {
+    "web": {
+      "status": "operational",
+      "description": "Main blog website"
+    },
+    "cms": {
+      "status": "operational",
+      "description": "Sveltia CMS admin interface"
+    },
+    "auth": {
+      "status": "operational",
+      "description": "OAuth authentication service",
+      "endpoint": "https://noveris-blog-auth.vercel.app"
+    }
+  },
+  "checks": {
+    "database": "static",
+    "cdn": "github-pages",
+    "ssl": "enabled"
+  }
+}
