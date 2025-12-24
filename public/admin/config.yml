@@ -2,13 +2,11 @@ backend:
   name: github
   repo: Noveris-AI/Noveris-AI.github.io
   branch: main
-  # 需要配置认证服务器，请查看 CMS_SETUP.md 获取设置步骤
-  # base_url: https://YOUR-AUTH-SERVER.vercel.app
-  # auth_endpoint: /api/auth
+  base_url: https://noveris-blog-auth.vercel.app
+  auth_endpoint: /api/auth
 
-# 本地测试模式（开发时使用）
-# 启用后可在本地编辑，无需认证服务器
-local_backend: true
+# 本地测试模式（可选）
+# local_backend: true
 
 # 媒体文件存储
 media_folder: public/images/posts
