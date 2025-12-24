@@ -102,30 +102,33 @@ export default async function handler(req, res) {
           <div class="container">
             <div class="success">✓</div>
             <h1>Authorization Successful</h1>
-            <p>You can close this window and return to the CMS.</p>
+            <p>Redirecting back to CMS...</p>
           </div>
           <script>
             (function() {
               try {
-                const token = ${JSON.stringify(data.access_token)};
-                const provider = 'github';
+                const authData = {
+                  token: ${JSON.stringify(data.access_token)},
+                  provider: 'github'
+                };
 
-                // Send message to opener window (CMS)
+                const message = 'authorization:github:success:' + JSON.stringify(authData);
+
+                // Send message to all possible parents
                 if (window.opener) {
-                  window.opener.postMessage(
-                    'authorization:' + provider + ':success:' + JSON.stringify({
-                      token: token,
-                      provider: provider
-                    }),
-                    window.location.origin
-                  );
+                  // For popup window
+                  window.opener.postMessage(message, '*');
+                  console.log('Sent auth message to opener');
 
-                  // Close after a short delay
                   setTimeout(() => {
                     window.close();
                   }, 1000);
+                } else if (window.parent && window.parent !== window) {
+                  // For iframe
+                  window.parent.postMessage(message, '*');
+                  console.log('Sent auth message to parent');
                 } else {
-                  console.error('No opener window found');
+                  console.error('No parent window found');
                 }
               } catch (error) {
                 console.error('Error sending auth message:', error);
