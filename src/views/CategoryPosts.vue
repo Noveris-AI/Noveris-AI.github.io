@@ -7,7 +7,7 @@ import BlogCard from '../components/blog/BlogCard.vue'
 import { posts, categories } from '../data/posts'
 
 const route = useRoute()
-const { locale } = useI18n()
+const { t, locale } = useI18n()
 
 const category = computed(() => {
   return categories.find(c => c.id === route.params.category)
@@ -21,17 +21,25 @@ const categoryName = computed(() => {
   if (!category.value) return ''
   return locale.value === 'zh' ? category.value.nameZh : category.value.name
 })
+
+const postsCountText = computed(() => {
+  const count = categoryPosts.value.length
+  if (count === 1) {
+    return t('categories.postsSingular', { count })
+  }
+  return t('categories.postsCount', { count })
+})
 </script>
 
 <template>
   <DefaultLayout>
     <section v-if="category" class="page-header" :style="{ '--category-color': category.color }">
       <div class="container">
-        <RouterLink to="/categories" class="back-link">← Categories</RouterLink>
+        <RouterLink to="/categories" class="back-link">← {{ t('categories.backToCategories') }}</RouterLink>
         <div class="header-content">
           <span class="category-icon">{{ category.icon }}</span>
           <h1>{{ categoryName }}</h1>
-          <p>{{ categoryPosts.length }} {{ categoryPosts.length === 1 ? 'post' : 'posts' }}</p>
+          <p>{{ postsCountText }}</p>
         </div>
       </div>
     </section>
@@ -42,8 +50,8 @@ const categoryName = computed(() => {
           <BlogCard v-for="post in categoryPosts" :key="post.slug" :post="post" />
         </div>
         <div v-else class="no-posts">
-          <p>No posts in this category yet.</p>
-          <RouterLink to="/blog" class="btn">View All Posts</RouterLink>
+          <p>{{ t('categories.noPosts') }}</p>
+          <RouterLink to="/blog" class="btn">{{ t('categories.viewAllPosts') }}</RouterLink>
         </div>
       </div>
     </section>

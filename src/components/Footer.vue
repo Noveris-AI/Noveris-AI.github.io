@@ -55,7 +55,7 @@ const currentYear = new Date().getFullYear()
       </div>
 
       <div class="footer-bottom">
-        <p>&copy; 2024-{{ currentYear }} Liu Yaojie (Passion). {{ t('footer.rights') }}</p>
+        <p>{{ t('footer.copyright', { year: `2024-${currentYear}` }) }}</p>
         <p class="powered-by">{{ t('footer.poweredBy') }}</p>
       </div>
     </div>

@@ -35,6 +35,7 @@ const messages = {
     categories: {
       title: 'Categories',
       subtitle: 'Explore topics by category',
+      backToCategories: 'Categories',
       ai: 'Artificial Intelligence',
       aiDesc: 'Machine learning, deep learning, and AI research.',
       cloudNative: 'Cloud Native',
@@ -44,7 +45,10 @@ const messages = {
       llm: 'Large Language Models',
       llmDesc: 'GPT, LLaMA, prompt engineering, and LLM applications.',
       viewPosts: 'View Posts',
-      postsCount: '{count} posts'
+      viewAllPosts: 'View All Posts',
+      postsCount: '{count} posts',
+      postsSingular: '{count} post',
+      noPosts: 'No posts in this category yet.'
     },
     about: {
       title: 'About',
@@ -117,7 +121,7 @@ const messages = {
       showLess: 'Show Less'
     },
     footer: {
-      rights: 'All rights reserved.',
+      copyright: '© {year} Liu Yaojie (Passion). All rights reserved.',
       poweredBy: 'Powered by Vue 3 & Vite',
       navigation: 'Navigation',
       resources: 'Resources',
@@ -170,16 +174,20 @@ const messages = {
     categories: {
       title: '分类',
       subtitle: '按分类探索主题',
+      backToCategories: '分类',
       ai: '人工智能',
-      aiDesc: '机器学习, 深度学习和 AI 研究.',
+      aiDesc: '机器学习、深度学习和 AI 研究。',
       cloudNative: '云原生',
-      cloudNativeDesc: 'Kubernetes, Docker, 微服务和云基础设施.',
+      cloudNativeDesc: 'Kubernetes、Docker、微服务和云基础设施。',
       development: '开发',
-      developmentDesc: '编程, 软件工程和最佳实践.',
+      developmentDesc: '编程、软件工程和最佳实践。',
       llm: '大语言模型',
-      llmDesc: 'GPT, LLaMA, 提示工程和 LLM 应用.',
+      llmDesc: 'GPT、LLaMA、提示工程和 LLM 应用。',
       viewPosts: '查看文章',
-      postsCount: '{count} 篇文章'
+      viewAllPosts: '查看所有文章',
+      postsCount: '{count} 篇文章',
+      postsSingular: '{count} 篇文章',
+      noPosts: '该分类暂无文章。'
     },
     about: {
       title: '关于',
@@ -252,7 +260,7 @@ const messages = {
       showLess: '收起'
     },
     footer: {
-      rights: '保留所有权利.',
+      copyright: '© {year} 刘耀杰（Passion）。保留所有权利。',
       poweredBy: '由 Vue 3 & Vite 驱动',
       navigation: '导航',
       resources: '资源',
