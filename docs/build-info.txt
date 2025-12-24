@@ -1,0 +1,23 @@
+Build completed at 2025-12-24T14:29:57Z
+Commit: 4c4b3d88ea9540d541661844c467442b0bbaa82c
+Commit Message: Fix: Grant write permission to GitHub Actions for docs deployment
+
+## Problem
+GitHub Actions cannot push docs/ to repository:
+Error: Permission to Noveris-AI.github.io.git denied to github-actions[bot]
+
+## Solution
+Change permissions in workflow from:
+- contents: read
+To:
+- contents: write
+
+This allows GitHub Actions to commit and push the built docs/ folder.
+
+🤖 Generated with [Claude Code](https://claude.com/claude-code)
+
+Co-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>
+Build number: 38
+Branch: main
+Triggered by: push
+Repository: Noveris-AI/Noveris-AI.github.io
