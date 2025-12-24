@@ -33,45 +33,38 @@ jobs:
       - name: Build
         run: npm run build
 
-      - name: Setup dist directory
+      - name: Deploy to root directory
         run: |
-          cp docs/index.html docs/404.html
-          touch docs/.nojekyll
-
-          # 生成详细的构建信息
-          echo "Build completed at $(date -u +"%Y-%m-%dT%H:%M:%SZ")" > docs/build-info.txt
-          echo "Commit: ${{ github.sha }}" >> docs/build-info.txt
-          echo "Commit Message: $(git log -1 --pretty=%B)" >> docs/build-info.txt
-          echo "Build number: ${{ github.run_number }}" >> docs/build-info.txt
-          echo "Branch: ${{ github.ref_name }}" >> docs/build-info.txt
-          echo "Triggered by: ${{ github.event_name }}" >> docs/build-info.txt
-          echo "Repository: ${{ github.repository }}" >> docs/build-info.txt
+          # Copy built files to root for GitHub Pages user site deployment
+          cp -r dist/* .
+          cp dist/index.html 404.html
+          touch .nojekyll
 
           # 更新健康检查文件的时间戳
-          if [ -f docs/health.json ]; then
-            sed -i.bak "s/\"timestamp\": \"[^\"]*\"/\"timestamp\": \"$(date -u +"%Y-%m-%dT%H:%M:%SZ")\"/" docs/health.json
-            rm docs/health.json.bak 2>/dev/null || true
+          if [ -f health.json ]; then
+            sed -i.bak "s/\"timestamp\": \"[^\"]*\"/\"timestamp\": \"$(date -u +"%Y-%m-%dT%H:%M:%SZ")\"/" health.json
+            rm health.json.bak 2>/dev/null || true
           fi
+
+          # 生成构建信息
+          echo "Build completed at $(date -u +"%Y-%m-%dT%H:%M:%SZ")" > build-info.txt
+          echo "Commit: ${{ github.sha }}" >> build-info.txt
+          echo "Build number: ${{ github.run_number }}" >> build-info.txt
+          echo "Branch: ${{ github.ref_name }}" >> build-info.txt
 
           # 验证关键文件存在
           echo "Verifying build output..."
-          test -f docs/index.html || (echo "ERROR: index.html not found" && exit 1)
-          test -f docs/manifest.json || (echo "ERROR: manifest.json not found" && exit 1)
-          test -f docs/sw.js || (echo "ERROR: sw.js not found" && exit 1)
-          test -f docs/health.json || (echo "ERROR: health.json not found" && exit 1)
-
-          # 列出构建输出
-          echo "Build output files:"
-          ls -lah docs/
-          echo "Assets:"
-          ls -lah docs/assets/ | head -20
+          test -f index.html || (echo "ERROR: index.html not found" && exit 1)
+          test -f manifest.json || (echo "ERROR: manifest.json not found" && exit 1)
+          test -f sw.js || (echo "ERROR: sw.js not found" && exit 1)
+          test -f 404.html || (echo "ERROR: 404.html not found" && exit 1)
 
           echo "Build verification completed successfully"
 
-      - name: Commit docs to repository
+      - name: Commit to repository
         run: |
           git config user.name "GitHub Actions"
           git config user.email "actions@github.com"
-          git add docs/
+          git add -A
           git commit -m "Deploy: Build #${{ github.run_number }} from ${{ github.sha }}" || echo "No changes to commit"
           git push
