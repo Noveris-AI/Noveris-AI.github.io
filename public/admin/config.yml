@@ -8,7 +8,7 @@ backend:
 
 # 本地测试模式（开发时使用）
 # 启用后可在本地编辑，无需认证服务器
-# local_backend: true
+local_backend: true
 
 # 媒体文件存储
 media_folder: public/images/posts
