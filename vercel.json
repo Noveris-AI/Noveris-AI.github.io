@@ -1,18 +1,8 @@
 {
-  "buildCommand": "npm run build",
-  "outputDirectory": "dist",
-  "framework": "vue",
-  "rewrites": [
-    {
-      "source": "/api/(.*)",
-      "destination": "/api/$1"
-    },
-    {
-      "source": "/((?!api/).*)",
-      "destination": "/index.html"
+  "functions": {
+    "api/auth.js": {
+      "memory": 1024,
+      "maxDuration": 10
     }
-  ],
-  "env": {
-    "EMAIL_USER": "novatra.ai@novatra.cn"
   }
 }
