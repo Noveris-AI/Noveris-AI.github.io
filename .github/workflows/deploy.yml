@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write  # 允许推送到仓库
   pages: write
   id-token: write
 
