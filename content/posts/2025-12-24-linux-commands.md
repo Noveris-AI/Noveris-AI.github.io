@@ -1,9 +1,9 @@
 ---
 title: Linux Commands
 titleZh: Linux 命令
-slug: Cloud Native
-excerpt: Linux Commands
-excerptZh: Linux 命令
+slug: linux-commands
+excerpt: Essential Linux command line reference for system administration and daily operations
+excerptZh: Linux 系统管理和日常操作的基本命令行参考
 content: |-
   ```plain
   # 列出当前目录中的文件和子目录
