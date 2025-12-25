@@ -1,15 +1,16 @@
 <script setup lang="ts">
 const route = useRoute()
-const { locale } = useI18n()
 
-// Determine content path based on locale
-const basePath = computed(() =>
-  locale.value === 'zh' ? '/blog/zh' : '/blog/en'
-)
+// Get locale from route params
+const contentLocale = computed(() => route.params.locale as string || 'zh')
+
+// Determine content path based on route locale
+const basePath = computed(() => `/blog/${contentLocale.value}`)
 
 // Fetch the post
-const { data: post } = await useAsyncData(`post-${route.params.slug}`, () =>
-  queryContent(`${basePath.value}/${route.params.slug}`).findOne()
+const { data: post } = await useAsyncData(
+  `post-${contentLocale.value}-${route.params.slug}`,
+  () => queryContent(`${basePath.value}/${route.params.slug}`).findOne()
 )
 
 // 404 if post not found
@@ -53,8 +54,9 @@ useHead({
 })
 
 // Fetch related posts
-const { data: relatedPosts } = await useAsyncData(`related-${route.params.slug}`, () =>
-  queryContent(basePath.value)
+const { data: relatedPosts } = await useAsyncData(
+  `related-${contentLocale.value}-${route.params.slug}`,
+  () => queryContent(basePath.value)
     .where({
       _path: { $ne: post.value?._path },
       category: post.value?.category,
