@@ -324,6 +324,6 @@ category: cloud-native
 cover: ''
 readTime: 5
 publishedAt: 2025-12-24T21:47:00+08:00
-likes: 0
+likes: 9999
 ---
 
