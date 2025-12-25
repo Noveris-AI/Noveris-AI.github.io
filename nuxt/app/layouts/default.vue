@@ -2,7 +2,25 @@
 const { locale, locales, setLocale } = useI18n()
 const colorMode = useColorMode()
 const route = useRoute()
-const router = useRouter()
+
+// Client-side locale detection for blog posts
+const clientLocale = ref<string | null>(null)
+
+// Detect blog locale from path
+const detectBlogLocale = (path: string) => {
+  const blogMatch = path.match(/^(?:\/en)?\/blog\/(zh|en)\/([^/]+)\/?$/)
+  return blogMatch ? blogMatch[1] : null
+}
+
+onMounted(() => {
+  // Detect content locale from URL on client side
+  clientLocale.value = detectBlogLocale(window.location.pathname)
+})
+
+// Update clientLocale when route changes (client-side navigation)
+watch(() => route.path, (newPath) => {
+  clientLocale.value = detectBlogLocale(newPath)
+})
 
 // Toggle theme
 const toggleTheme = () => {
@@ -14,15 +32,10 @@ const availableLocales = computed(() =>
   locales.value.filter((l) => typeof l !== 'string')
 )
 
-// Check if we're on a blog post page
-const isBlogPost = computed(() => {
-  const path = route.path
-  return /^(?:\/en)?\/blog\/(zh|en)\/[^/]+\/?$/.test(path)
-})
-
 // Extract blog post info from current path
 const getBlogPostInfo = () => {
-  const path = route.path
+  // Use window.location on client for accurate path
+  const path = typeof window !== 'undefined' ? window.location.pathname : route.path
   const blogMatch = path.match(/^(?:\/en)?\/blog\/(zh|en)\/([^/]+)\/?$/)
   if (blogMatch) {
     return { contentLocale: blogMatch[1], slug: blogMatch[2] }
@@ -32,8 +45,11 @@ const getBlogPostInfo = () => {
 
 // Get effective locale - for blog posts, use content locale; otherwise use i18n locale
 const effectiveLocale = computed(() => {
-  const blogInfo = getBlogPostInfo()
-  return blogInfo ? blogInfo.contentLocale : locale.value
+  // Use client-detected locale for blog posts
+  if (clientLocale.value) {
+    return clientLocale.value
+  }
+  return locale.value
 })
 
 // Handle language switch - check if we're on a blog post page
