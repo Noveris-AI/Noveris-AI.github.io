@@ -165,11 +165,8 @@ const { data: relatedPosts } = await useAsyncData(`related-${route.params.slug}`
 
       <!-- Comments -->
       <section class="mt-16 pt-8 border-t border-gray-200 dark:border-gray-700">
-        <h2 class="text-2xl font-bold mb-6">Comments</h2>
-        <!-- Giscus will be integrated here -->
-        <div class="bg-gray-50 dark:bg-gray-800 rounded-lg p-8 text-center text-gray-500">
-          Comments powered by Giscus (to be configured)
-        </div>
+        <h2 class="text-2xl font-bold mb-6">{{ $t('blog.share') }}</h2>
+        <GiscusComments />
       </section>
     </div>
   </article>
