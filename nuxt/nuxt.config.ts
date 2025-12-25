@@ -17,8 +17,16 @@ export default defineNuxtConfig({
     '@vueuse/nuxt',
     '@pinia/nuxt',
     '@nuxt/eslint',
-    '@nuxtjs/tailwindcss'
+    '@nuxtjs/tailwindcss',
+    '@nuxtjs/color-mode'
   ],
+
+  // Color mode configuration
+  colorMode: {
+    classSuffix: '',
+    preference: 'system',
+    fallback: 'light'
+  },
 
   // Nuxt Content configuration
   content: {
@@ -82,7 +90,8 @@ export default defineNuxtConfig({
     preset: 'static',
     prerender: {
       routes: ['/sitemap.xml', '/rss.xml'],
-      crawlLinks: true
+      crawlLinks: true,
+      failOnError: false
     }
   },
 
