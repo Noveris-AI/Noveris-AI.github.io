@@ -30,6 +30,12 @@ const getBlogPostInfo = () => {
   return null
 }
 
+// Get effective locale - for blog posts, use content locale; otherwise use i18n locale
+const effectiveLocale = computed(() => {
+  const blogInfo = getBlogPostInfo()
+  return blogInfo ? blogInfo.contentLocale : locale.value
+})
+
 // Handle language switch - check if we're on a blog post page
 const handleLocaleChange = (event: Event, newLocale: string) => {
   // For blog posts, prevent i18n default behavior and navigate directly
@@ -89,7 +95,7 @@ const handleLocaleChange = (event: Event, newLocale: string) => {
           <!-- Language Switcher -->
           <div class="relative">
             <select
-              :value="locale"
+              :value="effectiveLocale"
               class="appearance-none bg-transparent border border-gray-300 dark:border-gray-600 rounded px-2 py-1 text-sm cursor-pointer"
               @change="handleLocaleChange($event, ($event.target as HTMLSelectElement).value)"
             >
