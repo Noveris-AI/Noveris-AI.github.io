@@ -18,11 +18,12 @@ const availableLocales = computed(() =>
 const handleLocaleChange = (newLocale: string) => {
   const path = route.path
 
-  // Check if on blog post page with locale in path
-  const blogMatch = path.match(/^\/blog\/(zh|en)\/(.+)$/)
+  // Check if on blog post page with locale in path (may have i18n prefix)
+  const blogMatch = path.match(/^(?:\/en)?\/blog\/(zh|en)\/(.+?)(?:\/)?$/)
   if (blogMatch) {
     const slug = blogMatch[2]
-    router.push(`/blog/${newLocale}/${slug}`)
+    // Use window.location for direct navigation without i18n prefix manipulation
+    window.location.href = `/blog/${newLocale}/${slug}`
   } else {
     // For other pages, use standard i18n locale switch
     setLocale(newLocale)
