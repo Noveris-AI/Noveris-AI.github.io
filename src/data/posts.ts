@@ -1,6 +1,6 @@
 // 自动生成的文章数据
 // 由 scripts/sync-cms-content.mjs 生成
-// 最后更新: 2025-12-25T03:54:42.233Z
+// 最后更新: 2025-12-25T03:58:09.071Z
 
 export interface Post {
   id?: number
@@ -84,7 +84,7 @@ export const posts: Post[] = [
     "createdAt": "2025-12-24T21:47:00+08:00",
     "readTime": 5,
     "cover": "",
-    "likes": 0,
+    "likes": 9999,
     "comments": []
   }
 ]
