@@ -2,7 +2,7 @@
   "status": "healthy",
   "service": "Noveris Blog",
   "version": "2.1",
-  "timestamp": "2025-12-25T04:02:19Z",
+  "timestamp": "2025-12-25T04:17:40Z",
   "components": {
     "web": {
       "status": "operational",
