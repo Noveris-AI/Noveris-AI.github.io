@@ -1,6 +1,8 @@
 <script setup lang="ts">
 const { locale, locales, setLocale } = useI18n()
 const colorMode = useColorMode()
+const route = useRoute()
+const router = useRouter()
 
 // Toggle theme
 const toggleTheme = () => {
@@ -11,6 +13,21 @@ const toggleTheme = () => {
 const availableLocales = computed(() =>
   locales.value.filter((l) => typeof l !== 'string')
 )
+
+// Handle language switch - check if we're on a blog post page
+const handleLocaleChange = (newLocale: string) => {
+  const path = route.path
+
+  // Check if on blog post page with locale in path
+  const blogMatch = path.match(/^\/blog\/(zh|en)\/(.+)$/)
+  if (blogMatch) {
+    const slug = blogMatch[2]
+    router.push(`/blog/${newLocale}/${slug}`)
+  } else {
+    // For other pages, use standard i18n locale switch
+    setLocale(newLocale)
+  }
+}
 </script>
 
 <template>
@@ -57,7 +74,7 @@ const availableLocales = computed(() =>
             <select
               :value="locale"
               class="appearance-none bg-transparent border border-gray-300 dark:border-gray-600 rounded px-2 py-1 text-sm cursor-pointer"
-              @change="setLocale(($event.target as HTMLSelectElement).value)"
+              @change="handleLocaleChange(($event.target as HTMLSelectElement).value)"
             >
               <option
                 v-for="loc in availableLocales"
