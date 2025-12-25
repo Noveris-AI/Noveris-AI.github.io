@@ -1,0 +1,15 @@
+{
+  "id": "ai",
+  "name": {
+    "en": "Artificial Intelligence",
+    "zh": "人工智能"
+  },
+  "slug": "ai",
+  "description": {
+    "en": "Articles about AI and machine learning",
+    "zh": "关于人工智能和机器学习的文章"
+  },
+  "icon": "brain",
+  "color": "#0d9488",
+  "order": 1
+}

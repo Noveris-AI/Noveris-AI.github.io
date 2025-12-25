@@ -1,0 +1,121 @@
+{
+  "site": {
+    "title": "Noveris Blog",
+    "description": "Noveris AI Tech Blog - AI, Web Development, and Technology Insights",
+    "author": "Noveris AI"
+  },
+  "nav": {
+    "home": "Home",
+    "blog": "Blog",
+    "portfolio": "Portfolio",
+    "knowledge": "Knowledge",
+    "about": "About",
+    "search": "Search",
+    "language": "Language"
+  },
+  "blog": {
+    "title": "Blog",
+    "description": "Explore the latest insights on AI, Web Development, and Technology",
+    "readMore": "Read More",
+    "readTime": "{time} min read",
+    "publishedAt": "Published on",
+    "updatedAt": "Updated on",
+    "author": "Author",
+    "category": "Category",
+    "tags": "Tags",
+    "share": "Share",
+    "tableOfContents": "Table of Contents",
+    "relatedPosts": "Related Posts",
+    "seriesPosts": "Series Posts",
+    "noPosts": "No posts yet",
+    "featured": "Featured",
+    "latest": "Latest",
+    "popular": "Popular"
+  },
+  "portfolio": {
+    "title": "Portfolio",
+    "description": "My projects and case studies",
+    "projects": "Projects",
+    "caseStudies": "Case Studies",
+    "viewProject": "View Project",
+    "viewCode": "View Code",
+    "technologies": "Technologies",
+    "status": {
+      "active": "Active",
+      "completed": "Completed",
+      "inProgress": "In Progress",
+      "archived": "Archived"
+    }
+  },
+  "knowledge": {
+    "title": "Knowledge Base",
+    "description": "FAQs, Glossary, and Code Snippets",
+    "faq": "FAQ",
+    "glossary": "Glossary",
+    "snippets": "Snippets",
+    "searchPlaceholder": "Search knowledge base..."
+  },
+  "search": {
+    "placeholder": "Search articles, projects, knowledge...",
+    "noResults": "No results found",
+    "results": "{count} results",
+    "filters": "Filters",
+    "clear": "Clear"
+  },
+  "common": {
+    "loading": "Loading...",
+    "error": "Something went wrong",
+    "retry": "Retry",
+    "back": "Back",
+    "next": "Next",
+    "prev": "Previous",
+    "all": "All",
+    "more": "More",
+    "less": "Less",
+    "copy": "Copy",
+    "copied": "Copied",
+    "share": "Share",
+    "download": "Download",
+    "close": "Close",
+    "open": "Open",
+    "save": "Save",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "delete": "Delete",
+    "edit": "Edit",
+    "view": "View"
+  },
+  "footer": {
+    "copyright": "All rights reserved",
+    "poweredBy": "Built with Nuxt",
+    "links": {
+      "github": "GitHub",
+      "twitter": "Twitter",
+      "email": "Email"
+    }
+  },
+  "contact": {
+    "title": "Contact Us",
+    "name": "Name",
+    "email": "Email",
+    "subject": "Subject",
+    "message": "Message",
+    "send": "Send",
+    "sending": "Sending...",
+    "success": "Message sent successfully!",
+    "error": "Failed to send, please try again"
+  },
+  "theme": {
+    "light": "Light Mode",
+    "dark": "Dark Mode",
+    "system": "System"
+  },
+  "a11y": {
+    "skipToContent": "Skip to main content",
+    "toggleMenu": "Toggle menu",
+    "toggleTheme": "Toggle theme",
+    "toggleLanguage": "Toggle language",
+    "externalLink": "External link",
+    "newWindow": "Opens in new window"
+  }
+}

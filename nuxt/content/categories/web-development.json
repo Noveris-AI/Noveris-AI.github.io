@@ -1,0 +1,15 @@
+{
+  "id": "web-development",
+  "name": {
+    "en": "Web Development",
+    "zh": "Web 开发"
+  },
+  "slug": "web-development",
+  "description": {
+    "en": "Frontend, backend, and full-stack development",
+    "zh": "前端、后端和全栈开发"
+  },
+  "icon": "code",
+  "color": "#3b82f6",
+  "order": 2
+}

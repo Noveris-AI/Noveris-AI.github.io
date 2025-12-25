@@ -1,0 +1,40 @@
+{
+  "name": "noveris-blog-nuxt",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "nuxt dev",
+    "build": "nuxt build",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview",
+    "postinstall": "nuxt prepare",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "typecheck": "nuxt typecheck",
+    "test": "vitest",
+    "test:unit": "vitest run",
+    "test:e2e": "playwright test",
+    "prepare": "nuxt prepare"
+  },
+  "dependencies": {
+    "@nuxt/content": "^2.13.4",
+    "@nuxt/image": "^1.11.0",
+    "@nuxtjs/i18n": "^10.2.1",
+    "@pinia/nuxt": "^0.9.0",
+    "@vueuse/nuxt": "^12.8.2",
+    "meilisearch": "^0.48.2",
+    "nuxt": "^3.20.2",
+    "pinia": "^2.3.1",
+    "vue": "latest",
+    "zod": "^3.25.76"
+  },
+  "devDependencies": {
+    "@nuxt/eslint": "^1.12.1",
+    "@playwright/test": "^1.57.0",
+    "@vue/test-utils": "^2.4.6",
+    "eslint": "^9.39.2",
+    "typescript": "^5.9.3",
+    "vitest": "^2.1.9",
+    "vue-tsc": "^3.2.1"
+  }
+}

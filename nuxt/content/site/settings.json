@@ -1,0 +1,27 @@
+{
+  "title": {
+    "en": "Noveris Blog",
+    "zh": "Noveris 博客"
+  },
+  "description": {
+    "en": "Noveris AI Tech Blog - AI, Web Development, and Technology Insights",
+    "zh": "Noveris AI 技术博客 - AI、Web 开发与技术洞察"
+  },
+  "logo": "/logo.svg",
+  "favicon": "/favicon.svg",
+  "social": {
+    "github": "https://github.com/Noveris-AI",
+    "email": "contact@noveris.ai"
+  },
+  "analytics": {
+    "googleAnalyticsId": ""
+  },
+  "comments": {
+    "enabled": true,
+    "provider": "giscus"
+  },
+  "search": {
+    "enabled": true,
+    "provider": "meilisearch"
+  }
+}
