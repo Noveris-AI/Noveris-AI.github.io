@@ -1,0 +1,13 @@
+{
+  "id": "what-is-noveris",
+  "question": {
+    "en": "What is Noveris?",
+    "zh": "什么是 Noveris？"
+  },
+  "answer": {
+    "en": "Noveris is an AI technology company focused on exploring the frontiers of artificial intelligence and web development. We share insights, best practices, and open source tools through our blog and projects.",
+    "zh": "Noveris 是一家专注于探索人工智能和 Web 开发前沿的科技公司。我们通过博客和项目分享技术洞察、最佳实践和开源工具。"
+  },
+  "category": "general",
+  "order": 1
+}

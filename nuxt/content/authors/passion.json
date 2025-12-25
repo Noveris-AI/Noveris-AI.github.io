@@ -1,0 +1,16 @@
+{
+  "id": "passion",
+  "name": {
+    "en": "Liu Yaojie",
+    "zh": "刘耀杰"
+  },
+  "avatar": "/images/authors/passion.jpg",
+  "bio": {
+    "en": "Founder of Noveris AI. Passionate about AI, Web Development, and Open Source.",
+    "zh": "Noveris AI 创始人。热衷于人工智能、Web 开发和开源。"
+  },
+  "social": {
+    "github": "https://github.com/Noveris-AI",
+    "email": "passion@noveris.ai"
+  }
+}

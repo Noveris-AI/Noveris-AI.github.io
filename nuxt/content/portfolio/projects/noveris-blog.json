@@ -1,0 +1,25 @@
+{
+  "id": "noveris-blog",
+  "title": {
+    "en": "Noveris Blog",
+    "zh": "Noveris 博客"
+  },
+  "description": {
+    "en": "A modern tech blog built with Nuxt 4, featuring multilingual support, dark mode, and Git-based content management.",
+    "zh": "使用 Nuxt 4 构建的现代技术博客，支持多语言、深色模式和基于 Git 的内容管理。"
+  },
+  "type": "web-application",
+  "status": "active",
+  "technologies": ["Nuxt 4", "Vue 3", "TypeScript", "Nuxt Content", "Meilisearch", "GitHub Pages"],
+  "cover": {
+    "src": "/images/projects/noveris-blog.jpg",
+    "alt": "Noveris Blog Screenshot"
+  },
+  "links": {
+    "live": "https://noveris-ai.github.io",
+    "github": "https://github.com/Noveris-AI/Noveris-AI.github.io"
+  },
+  "featured": true,
+  "order": 1,
+  "startDate": "2025-12-01"
+}

@@ -1,0 +1,121 @@
+{
+  "site": {
+    "title": "Noveris Blog",
+    "description": "Noveris AI 技术博客 - AI、Web 开发与技术洞察",
+    "author": "Noveris AI"
+  },
+  "nav": {
+    "home": "首页",
+    "blog": "博客",
+    "portfolio": "作品集",
+    "knowledge": "知识库",
+    "about": "关于",
+    "search": "搜索",
+    "language": "语言"
+  },
+  "blog": {
+    "title": "博客",
+    "description": "探索 AI、Web 开发和技术的最新洞察",
+    "readMore": "阅读更多",
+    "readTime": "{time} 分钟阅读",
+    "publishedAt": "发布于",
+    "updatedAt": "更新于",
+    "author": "作者",
+    "category": "分类",
+    "tags": "标签",
+    "share": "分享",
+    "tableOfContents": "目录",
+    "relatedPosts": "相关文章",
+    "seriesPosts": "系列文章",
+    "noPosts": "暂无文章",
+    "featured": "精选",
+    "latest": "最新",
+    "popular": "热门"
+  },
+  "portfolio": {
+    "title": "作品集",
+    "description": "我的项目和案例研究",
+    "projects": "项目",
+    "caseStudies": "案例研究",
+    "viewProject": "查看项目",
+    "viewCode": "查看代码",
+    "technologies": "技术栈",
+    "status": {
+      "active": "运行中",
+      "completed": "已完成",
+      "inProgress": "进行中",
+      "archived": "已归档"
+    }
+  },
+  "knowledge": {
+    "title": "知识库",
+    "description": "常见问题、术语表和代码片段",
+    "faq": "常见问题",
+    "glossary": "术语表",
+    "snippets": "代码片段",
+    "searchPlaceholder": "搜索知识库..."
+  },
+  "search": {
+    "placeholder": "搜索文章、项目、知识...",
+    "noResults": "未找到结果",
+    "results": "{count} 个结果",
+    "filters": "筛选",
+    "clear": "清除"
+  },
+  "common": {
+    "loading": "加载中...",
+    "error": "出错了",
+    "retry": "重试",
+    "back": "返回",
+    "next": "下一篇",
+    "prev": "上一篇",
+    "all": "全部",
+    "more": "更多",
+    "less": "收起",
+    "copy": "复制",
+    "copied": "已复制",
+    "share": "分享",
+    "download": "下载",
+    "close": "关闭",
+    "open": "打开",
+    "save": "保存",
+    "cancel": "取消",
+    "confirm": "确认",
+    "delete": "删除",
+    "edit": "编辑",
+    "view": "查看"
+  },
+  "footer": {
+    "copyright": "版权所有",
+    "poweredBy": "基于 Nuxt 构建",
+    "links": {
+      "github": "GitHub",
+      "twitter": "Twitter",
+      "email": "邮箱"
+    }
+  },
+  "contact": {
+    "title": "联系我们",
+    "name": "姓名",
+    "email": "邮箱",
+    "subject": "主题",
+    "message": "留言",
+    "send": "发送",
+    "sending": "发送中...",
+    "success": "消息已发送！",
+    "error": "发送失败，请重试"
+  },
+  "theme": {
+    "light": "浅色模式",
+    "dark": "深色模式",
+    "system": "跟随系统"
+  },
+  "a11y": {
+    "skipToContent": "跳转到主要内容",
+    "toggleMenu": "切换菜单",
+    "toggleTheme": "切换主题",
+    "toggleLanguage": "切换语言",
+    "externalLink": "外部链接",
+    "newWindow": "在新窗口打开"
+  }
+}
