@@ -14,20 +14,36 @@ const availableLocales = computed(() =>
   locales.value.filter((l) => typeof l !== 'string')
 )
 
-// Handle language switch - check if we're on a blog post page
-const handleLocaleChange = (newLocale: string) => {
+// Check if we're on a blog post page
+const isBlogPost = computed(() => {
   const path = route.path
+  return /^(?:\/en)?\/blog\/(zh|en)\/[^/]+\/?$/.test(path)
+})
 
-  // Check if on blog post page with locale in path (may have i18n prefix)
-  const blogMatch = path.match(/^(?:\/en)?\/blog\/(zh|en)\/(.+?)(?:\/)?$/)
+// Extract blog post info from current path
+const getBlogPostInfo = () => {
+  const path = route.path
+  const blogMatch = path.match(/^(?:\/en)?\/blog\/(zh|en)\/([^/]+)\/?$/)
   if (blogMatch) {
-    const slug = blogMatch[2]
-    // Use window.location for direct navigation without i18n prefix manipulation
-    window.location.href = `/blog/${newLocale}/${slug}`
-  } else {
-    // For other pages, use standard i18n locale switch
-    setLocale(newLocale)
+    return { contentLocale: blogMatch[1], slug: blogMatch[2] }
   }
+  return null
+}
+
+// Handle language switch - check if we're on a blog post page
+const handleLocaleChange = (event: Event, newLocale: string) => {
+  // For blog posts, prevent i18n default behavior and navigate directly
+  const blogInfo = getBlogPostInfo()
+  if (blogInfo) {
+    event.preventDefault()
+    event.stopPropagation()
+    // Navigate to the same post in the new locale
+    window.location.href = `/blog/${newLocale}/${blogInfo.slug}`
+    return
+  }
+
+  // For other pages, use standard i18n locale switch
+  setLocale(newLocale)
 }
 </script>
 
@@ -75,7 +91,7 @@ const handleLocaleChange = (newLocale: string) => {
             <select
               :value="locale"
               class="appearance-none bg-transparent border border-gray-300 dark:border-gray-600 rounded px-2 py-1 text-sm cursor-pointer"
-              @change="handleLocaleChange(($event.target as HTMLSelectElement).value)"
+              @change="handleLocaleChange($event, ($event.target as HTMLSelectElement).value)"
             >
               <option
                 v-for="loc in availableLocales"
