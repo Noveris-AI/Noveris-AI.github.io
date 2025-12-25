@@ -1,1 +1,13 @@
+# Robots.txt for Noveris Blog
+# https://noveris-ai.github.io
 
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://noveris-ai.github.io/sitemap.xml
+
+# Disallow admin and API routes
+Disallow: /api/
+Disallow: /_nuxt/
+Disallow: /_payload.json
