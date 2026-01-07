@@ -5,9 +5,11 @@ import prisma from "@/lib/db";
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
+
     const user = await getUser();
     if (!user) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
@@ -18,7 +20,7 @@ export async function GET(
     // Fetch case
     const testCase = await prisma.case.findFirst({
       where: {
-        id: params.id,
+        id: id,
         userId: dbUser.id,
       },
       include: {
@@ -45,9 +47,11 @@ export async function GET(
 
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
+
     const user = await getUser();
     if (!user) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
@@ -58,7 +62,7 @@ export async function PATCH(
     // Verify ownership
     const testCase = await prisma.case.findFirst({
       where: {
-        id: params.id,
+        id: id,
         userId: dbUser.id,
       },
     });
@@ -73,7 +77,7 @@ export async function PATCH(
 
     // Update case
     const updatedCase = await prisma.case.update({
-      where: { id: params.id },
+      where: { id: id },
       data: {
         ...(markedSent !== undefined && { markedSent }),
         ...(resolvedAt !== undefined && { resolvedAt: resolvedAt ? new Date() : null }),
@@ -93,9 +97,11 @@ export async function PATCH(
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
+
     const user = await getUser();
     if (!user) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
@@ -106,7 +112,7 @@ export async function DELETE(
     // Verify ownership
     const testCase = await prisma.case.findFirst({
       where: {
-        id: params.id,
+        id: id,
         userId: dbUser.id,
       },
     });
@@ -117,7 +123,7 @@ export async function DELETE(
 
     // Delete case (cascade will delete messages and notes)
     await prisma.case.delete({
-      where: { id: params.id },
+      where: { id: id },
     });
 
     return NextResponse.json({ message: "Case deleted" });

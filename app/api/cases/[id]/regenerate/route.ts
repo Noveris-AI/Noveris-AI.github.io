@@ -7,9 +7,11 @@ import prisma from "@/lib/db";
 
 export async function POST(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
+
     const user = await getUser();
     if (!user) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
@@ -20,7 +22,7 @@ export async function POST(
     // Fetch case
     const testCase = await prisma.case.findFirst({
       where: {
-        id: params.id,
+        id: id,
         userId: dbUser.id,
       },
     });
@@ -52,7 +54,7 @@ export async function POST(
 
     // Update status
     await prisma.case.update({
-      where: { id: params.id },
+      where: { id: id },
       data: {
         generationStatus: "generating",
         generationStartedAt: new Date(),
@@ -62,7 +64,7 @@ export async function POST(
     // Regenerate
     const startTime = Date.now();
     const result = await regenerateRepairPlan(
-      params.id,
+      id,
       feedback || "",
       tone,
       {

@@ -4,11 +4,13 @@ import prisma from "@/lib/db";
 // GET /api/chats/[id] - 获取特定会话详情
 export async function GET(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
+
     const session = await prisma.chatSession.findUnique({
-      where: { id: params.id },
+      where: { id: id },
       include: {
         messages: {
           orderBy: { createdAt: "asc" },
@@ -36,11 +38,13 @@ export async function GET(
 // DELETE /api/chats/[id] - 删除会话
 export async function DELETE(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
+
     await prisma.chatSession.delete({
-      where: { id: params.id },
+      where: { id: id },
     });
 
     return NextResponse.json({ success: true });
@@ -56,14 +60,16 @@ export async function DELETE(
 // PATCH /api/chats/[id] - 更新会话标题
 export async function PATCH(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
+
     const body = await req.json();
     const { title } = body;
 
     const session = await prisma.chatSession.update({
-      where: { id: params.id },
+      where: { id: id },
       data: { title },
     });
 
