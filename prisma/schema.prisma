@@ -1,0 +1,213 @@
+// Prisma Schema for Relationship Repair Assistant
+// Database: PostgreSQL (Supabase or self-hosted)
+
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["driverAdapters"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// User accounts (linked to Supabase Auth)
+model User {
+  id            String    @id @default(cuid())
+  supabaseId    String    @unique // Maps to Supabase Auth user ID
+  email         String?
+  name          String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  // Relations
+  cases         Case[]
+  preferences   UserPreferences?
+  apiKeys       ApiKey[]
+
+  @@index([supabaseId])
+}
+
+// User settings and preferences
+model UserPreferences {
+  id                String   @id @default(cuid())
+  userId            String   @unique
+  user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  // AI Provider preference
+  preferredProvider String   @default("anthropic") // anthropic, openai, azure
+
+  // Tone style preference
+  defaultTone       String   @default("sincere") // sincere, gentle, formal, casual
+
+  // Privacy settings
+  saveRawInputs     Boolean  @default(false) // Don't save sensitive raw input by default
+  enableAnalytics   Boolean  @default(true)
+
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+}
+
+// API Keys for AI providers (user-provided, optional)
+model ApiKey {
+  id          String   @id @default(cuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  provider    String   // anthropic, openai, azure
+  keyName     String   // e.g., "Personal Claude Key"
+  keyEncrypted String  // Store encrypted (implement encryption before use)
+
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  lastUsedAt  DateTime?
+
+  @@index([userId, provider])
+}
+
+// A "case" represents one conflict/repair event
+model Case {
+  id          String   @id @default(cuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  // Conflict metadata
+  conflictType      String   // lie, broken_promise, cold_violence, verbal_hurt, boundary_issue, other
+  conflictDate      DateTime // When it happened
+  relationshipStage String   // flirting, dating, living_together, long_distance, near_breakup
+
+  // Input data (may be omitted if privacy mode)
+  whatIdid          String?  @db.Text
+  partnerFeelings   String?  @db.Text
+  myAttitude        String?  @db.Text
+  redFlags          String?  @db.Text // Topics to avoid
+
+  // Communication channel preference
+  channel           String   // text, phone, in_person
+
+  // Generation status
+  generationStatus  String   @default("pending") // pending, generating, completed, failed
+  generationError   String?  @db.Text
+  generationStartedAt DateTime?
+  generationCompletedAt DateTime?
+
+  // Output (always saved)
+  generatedOutput   Json?    // The full structured AI response
+  toneUsed          String   @default("sincere")
+
+  // User feedback
+  feedbackNote      String?  @db.Text // "She replied with..."
+  markedSent        Boolean  @default(false)
+  resolvedAt        DateTime?
+
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  // Relations
+  messages          Message[]
+  notes             Note[]
+
+  @@index([userId])
+  @@index([createdAt])
+}
+
+// Individual message versions generated for a case
+model Message {
+  id          String   @id @default(cuid())
+  caseId      String
+  case        Case     @relation(fields: [caseId], references: [id], onDelete: Cascade)
+
+  messageType String   // sms_short, sms_medium, sms_long, call_outline, meet_outline
+  tone        String   @default("sincere")
+  content     String   @db.Text
+
+  // Usage tracking
+  copyCount   Int      @default(0)
+  markedSent  Boolean  @default(false)
+  feedback    String?  @db.Text
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([caseId, messageType])
+}
+
+// User's reflective notes after sending
+model Note {
+  id          String   @id @default(cuid())
+  caseId      String
+  case        Case     @relation(fields: [caseId], references: [id], onDelete: Cascade)
+
+  content     String   @db.Text
+  noteType    String   @default("reflection") // reflection, follow_up, closure
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([caseId])
+}
+
+// Rate limiting tracking (in-memory or Redis, optionally persisted)
+model RateLimitLog {
+  id        String   @id @default(cuid())
+  userId    String?
+  identifier String  // IP address or user ID
+  action    String   // generate_case, regenerate, etc.
+
+  // Time bucket (minute or hour)
+  bucketAt  DateTime
+  count     Int
+
+  createdAt DateTime @default(now())
+
+  @@unique([identifier, action, bucketAt])
+  @@index([identifier, action, bucketAt])
+}
+
+// Basic analytics (aggregated, no sensitive content)
+model AnalyticsEvent {
+  id        String   @id @default(cuid())
+  eventType String   // case_created, generation_completed, message_copied, etc.
+
+  // Metadata only (no raw content)
+  metadata  Json?    // { tone: "sincere", conflictType: "lie", hasFeedback: true }
+
+  timestamp DateTime @default(now())
+
+  @@index([eventType])
+  @@index([timestamp])
+}
+
+// Chat Session (for emotional support conversations)
+model ChatSession {
+  id        String   @id @default(cuid())
+  userId    String?  // Optional for anonymous users
+  title     String   @default("新对话")
+
+  // First message preview
+  preview   String?  @db.Text
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  messages  ChatMessage[]
+
+  @@index([userId])
+  @@index([createdAt])
+}
+
+// Chat messages within a session
+model ChatMessage {
+  id        String   @id @default(cuid())
+  sessionId String
+  session   ChatSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+
+  role      String   // user, assistant
+  content   String   @db.Text
+
+  createdAt DateTime @default(now())
+
+  @@index([sessionId])
+  @@index([createdAt])
+}

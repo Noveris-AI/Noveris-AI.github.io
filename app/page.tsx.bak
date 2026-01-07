@@ -1,0 +1,252 @@
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { MessageCircle, MessageSquare, Heart, Lightbulb, Shield, Sparkles, Users } from "lucide-react";
+
+export default function HomePage() {
+  return (
+    <div className="min-h-screen bg-gradient-to-b from-rose-50 via-white to-purple-50 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950">
+      {/* Header */}
+      <header className="border-b bg-white/80 dark:bg-slate-950/80 backdrop-blur-sm sticky top-0 z-10">
+        <div className="container mx-auto px-4 py-4 flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <Heart className="h-6 w-6 text-rose-500 fill="rose-500" />
+            <span className="font-semibold text-lg">情感助手</span>
+          </div>
+          <nav className="flex items-center gap-4">
+            <Link href="/chat">
+              <Button size="sm">开始倾诉</Button>
+            </Link>
+          </nav>
+        </div>
+      </header>
+
+      {/* Hero Section */}
+      <main className="container mx-auto px-4 py-16 md:py-24">
+        <div className="max-w-4xl mx-auto text-center space-y-8">
+          {/* Badge */}
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-rose-100 dark:bg-rose-900/30 border border-rose-200 dark:border-rose-800">
+            <Sparkles className="h-4 w-4 text-rose-500" />
+            <span className="text-sm font-medium text-rose-700 dark:text-rose-300">
+              AI 驱动 · 倾听 · 分析 · 建议
+            </span>
+          </div>
+
+          {/* Heading */}
+          <div className="space-y-4">
+            <h1 className="text-4xl md:text-6xl font-bold tracking-tight">
+              生气了吗？<span className="text-rose-500"> 和 AI 说说话</span>
+            </h1>
+            <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
+              告诉 AI 发生了什么，它会帮你分析情况、给你建议、告诉你该怎么沟通
+            </p>
+          </div>
+
+          {/* CTA */}
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
+            <Link href="/chat">
+              <Button size="lg" className="w-full sm:w-auto min-w-[200px] bg-rose-600 hover:bg-rose-700">
+                开始倾诉
+              </Button>
+            </Link>
+          </div>
+
+          {/* Trust indicators */}
+          <div className="flex flex-wrap items-center justify-center gap-6 pt-8 text-sm text-muted-foreground">
+            <div className="flex items-center gap-2">
+              <MessageSquare className="h-4 w-4" />
+              <span>对话式交流</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <Heart className="h-4 w-4" />
+              <span>理解你的感受</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <Lightbulb className="h-4 w-4" />
+              <span>给出实用建议</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Features */}
+        <section className="mt-24 md:mt-32 space-y-12">
+          <div className="text-center max-w-2xl mx-auto space-y-4">
+            <h2 className="text-3xl font-bold">它能帮你什么</h2>
+            <p className="text-muted-foreground">
+              像和一个懂你的朋友聊天，帮你理清思绪、做出决定
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto">
+            <Card className="border-rose-200 dark:border-rose-900 hover:shadow-lg transition-shadow">
+              <CardHeader>
+                <div className="h-10 w-10 rounded-lg bg-rose-100 dark:bg-rose-900/20 flex items-center justify-center mb-4">
+                  <MessageCircle className="h-5 w-5 text-rose-600 dark:text-rose-400" />
+                </div>
+                <CardTitle>1. 倾听你的倾诉</CardTitle>
+                <CardDescription>
+                  告诉 AI 发生了什么，它会认真倾听，理解你的感受
+                </CardDescription>
+              </CardHeader>
+            </Card>
+
+            <Card className="border-blue-200 dark:border-blue-900 hover:shadow-lg transition-shadow">
+              <CardHeader>
+                <div className="h-10 w-10 rounded-lg bg-blue-100 dark:bg-blue-900/20 flex items-center justify-center mb-4">
+                  <Users className="h-5 w-5 text-blue-600 dark:text-blue-400" />
+                </div>
+                <CardTitle>2. 分析他的行为</CardTitle>
+                <CardDescription>
+                  帮你客观分析对方做得对不对，问题出在哪里
+                </CardDescription>
+              </CardHeader>
+            </Card>
+
+            <Card className="border-green-200 dark:border-green-900 hover:shadow-lg transition-shadow">
+              <CardHeader>
+                <div className="h-10 w-10 rounded-lg bg-green-100 dark:bg-green-900/20 flex items-center justify-center mb-4">
+                  <Lightbulb className="h-5 w-5 text-green-600 dark:text-green-400" />
+                </div>
+                <CardTitle>3. 给出沟通建议</CardTitle>
+                <CardDescription>
+                  告诉你该怎么说、怎么做，包括具体的沟通话术
+                </CardDescription>
+              </CardHeader>
+            </Card>
+          </div>
+        </section>
+
+        {/* Example dialogue */}
+        <section className="mt-24 md:mt-32">
+          <Card className="max-w-3xl mx-auto border-rose-200 dark:border-rose-900">
+            <CardHeader>
+              <CardTitle className="text-2xl">像和朋友聊天一样</CardTitle>
+              <CardDescription>看看真实对话是什么样的</CardDescription>
+            </CardHeader>
+            <CardContent className="pt-6 space-y-4">
+              <div className="space-y-4">
+                {/* Message 1 */}
+                <div className="flex gap-3">
+                  <div className="w-8 h-8 rounded-full bg-rose-500 flex items-center justify-center text-white text-xs font-bold shrink-0">
+                    你
+                  </div>
+                  <div className="bg-muted p-3 rounded-lg text-sm">
+                    他打游戏一晚上都不理我，我很生气
+                  </div>
+                </div>
+
+                {/* Message 2 */}
+                <div className="flex gap-3">
+                  <div className="w-8 h-8 rounded-full bg-purple-500 flex items-center justify-center text-white text-xs font-bold shrink-0">
+                    AI
+                  </div>
+                  <div className="bg-purple-50 dark:bg-purple-950/20 p-3 rounded-lg text-sm border border-purple-200 dark:border-purple-900">
+                    <p>我能理解你的感受。被忽略确实很让人难受。他事后有解释吗？</p>
+                  </div>
+                </div>
+
+                {/* Message 3 */}
+                <div className="flex gap-3">
+                  <div className="w-8 h-8 rounded-full bg-rose-500 flex items-center justify-center text-white text-xs font-bold shrink-0">
+                    你
+                  </div>
+                  <div className="bg-muted p-3 rounded-lg text-sm">
+                    他说只是想放松一下，但是我觉得不被重视
+                  </div>
+                </div>
+
+                {/* Message 4 */}
+                <div className="flex gap-3">
+                  <div className="w-8 h-8 rounded-full bg-purple-500 flex items-center justify-center text-white text-xs font-bold shrink-0">
+                    AI
+                  </div>
+                  <div className="bg-purple-50 dark:bg-purple-950/20 p-3 rounded-lg text-sm border border-purple-200 dark:border-purple-900">
+                    <p>你的感受是合理的。可以试试这样跟他说：</p>
+                    <p className="mt-2 italic text-purple-700 dark:text-purple-300">"我知道你需要放松，但是我更希望我们能有质量的相处时间。下次玩游戏前能不能告诉我一声？这样我心里有数，也不会担心你了。"</p>
+                  </div>
+                </div>
+
+                {/* Message 5 */}
+                <div className="flex gap-3">
+                  <div className="w-8 h-8 rounded-full bg-purple-500 flex items-center justify-center text-white text-xs font-bold shrink-0">
+                    AI
+                  </div>
+                  <div className="bg-purple-50 dark:bg-purple-950/20 p-3 rounded-lg text-sm border border-purple-200 dark:border-purple-900">
+                    <p>这样说既表达了你的需求，又不会让他觉得被指责。你觉得怎么样？</p>
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </section>
+
+        {/* Value Props */}
+        <section className="mt-24 md:mt-32">
+          <div className="text-center max-w-2xl mx-auto space-y-4 mb-8">
+            <h2 className="text-3xl font-bold">为什么选择 AI 情感助手</h2>
+          </div>
+
+          <div className="grid sm:grid-cols-2 gap-6 max-w-4xl mx-auto">
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-lg">✨ 完全客观</CardTitle>
+              </CardHeader>
+              <CardContent className="text-sm text-muted-foreground">
+                AI 不会偏袒任何一方，帮你理性分析情况
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-lg">💬 随时倾诉</CardTitle>
+              </CardHeader>
+              <CardContent className="text-sm text-muted-foreground">
+                24/7 在线，想聊就聊，不用等待朋友有空
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-lg">🎯 具体建议</CardTitle>
+              </CardHeader>
+              <CardContent className="text-sm text-muted-foreground">
+                不是空话，而是给你具体可执行的沟通话术
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-lg">🔒 隐私保护</CardTitle>
+              </CardHeader>
+              <CardContent className="text-sm text-muted-foreground">
+                你的对话内容完全保密，不会被他人看到
+              </CardContent>
+            </Card>
+          </div>
+        </section>
+
+        {/* Final CTA */}
+        <section className="mt-24 text-center pb-16">
+          <div className="max-w-2xl mx-auto space-y-6">
+            <h2 className="text-3xl font-bold">现在就开始倾诉吧</h2>
+            <p className="text-muted-foreground text-lg">
+              把 AI 当成一个懂你的朋友，告诉它你的感受
+            </p>
+            <Link href="/chat">
+              <Button size="lg" className="min-w-[200px] bg-rose-600 hover:bg-rose-700">
+                开始聊天
+              </Button>
+            </Link>
+          </div>
+        </section>
+      </main>
+
+      {/* Footer */}
+      <footer className="border-t bg-slate-50 dark:bg-slate-900 py-8">
+        <div className="container mx-auto px-4 text-center text-sm text-muted-foreground">
+          <p>© 2024 情感助手. 这是一个 AI 工具，不能替代专业心理咨询。</p>
+        </div>
+      </footer>
+    </div>
+  );
+}
