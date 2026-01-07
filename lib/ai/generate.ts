@@ -161,8 +161,6 @@ export async function generateRepairPlan(
           system: `${SYSTEM_PROMPT}\n\n${DEVELOPER_PROMPT}`,
           prompt: userPrompt,
           temperature: 0.7,
-          maxTokens: 4000,
-          timeout: TIMEOUT_MS,
         });
 
         // Parse and validate output
@@ -246,7 +244,6 @@ export async function streamRepairPlan(
       system: `${SYSTEM_PROMPT}\n\n${DEVELOPER_PROMPT}`,
       prompt: userPrompt,
       temperature: 0.7,
-      maxTokens: 4000,
     });
 
     // Consume the stream
@@ -318,7 +315,6 @@ export async function regenerateRepairPlan(
       system: `${SYSTEM_PROMPT}\n\n${DEVELOPER_PROMPT}`,
       prompt: userPrompt,
       temperature: 0.7,
-      maxTokens: 4000,
     });
 
     const parsedOutput = JSON.parse(result.text);
