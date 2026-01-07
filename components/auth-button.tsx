@@ -30,29 +30,20 @@ export function AuthButton() {
     setLoading(true);
 
     try {
-      if (mode === "signup") {
-        const { error } = await supabase.auth.signUp({
-          email,
-          options: {
-            emailRedirectTo: `${window.location.origin}/auth/callback`,
-          },
-        });
+      // 使用无密码登录方式
+      const { error } = await supabase.auth.signInWithOtp({
+        email,
+        options: {
+          emailRedirectTo: `${window.location.origin}/auth/callback`,
+        },
+      });
 
-        if (error) throw error;
+      if (error) throw error;
 
-        alert("请查收邮箱中的确认链接");
-      } else {
-        const { error } = await supabase.auth.signInWithOtp({
-          email,
-          options: {
-            emailRedirectTo: `${window.location.origin}/auth/callback`,
-          },
-        });
-
-        if (error) throw error;
-
-        alert("请查收邮箱中的登录链接");
-      }
+      alert(mode === "signup"
+        ? "请查收邮箱中的注册确认链接"
+        : "请查收邮箱中的登录链接"
+      );
 
       setOpen(false);
       setEmail("");
