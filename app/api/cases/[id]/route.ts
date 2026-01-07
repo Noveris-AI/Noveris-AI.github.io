@@ -16,6 +16,9 @@ export async function GET(
     }
 
     const dbUser = await getOrCreateDbUser(user.id);
+    if (!dbUser) {
+      return NextResponse.json({ error: "Failed to get user" }, { status: 500 });
+    }
 
     // Fetch case
     const testCase = await prisma.case.findFirst({
@@ -58,6 +61,9 @@ export async function PATCH(
     }
 
     const dbUser = await getOrCreateDbUser(user.id);
+    if (!dbUser) {
+      return NextResponse.json({ error: "Failed to get user" }, { status: 500 });
+    }
 
     // Verify ownership
     const testCase = await prisma.case.findFirst({
@@ -108,6 +114,9 @@ export async function DELETE(
     }
 
     const dbUser = await getOrCreateDbUser(user.id);
+    if (!dbUser) {
+      return NextResponse.json({ error: "Failed to get user" }, { status: 500 });
+    }
 
     // Verify ownership
     const testCase = await prisma.case.findFirst({

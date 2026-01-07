@@ -16,6 +16,9 @@ export async function POST(request: NextRequest) {
 
     // Get or create DB user
     const dbUser = await getOrCreateDbUser(user.id);
+    if (!dbUser) {
+      return NextResponse.json({ error: "Failed to get user" }, { status: 500 });
+    }
 
     // Rate limit check
     const rateLimit = await checkRateLimit(
@@ -180,6 +183,9 @@ export async function GET(request: NextRequest) {
     }
 
     const dbUser = await getOrCreateDbUser(user.id);
+    if (!dbUser) {
+      return NextResponse.json({ error: "Failed to get user" }, { status: 500 });
+    }
 
     // Get query params
     const { searchParams } = new URL(request.url);

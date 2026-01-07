@@ -11,6 +11,9 @@ export async function GET(request: NextRequest) {
     }
 
     const dbUser = await getOrCreateDbUser(user.id);
+    if (!dbUser) {
+      return NextResponse.json({ error: "Failed to get user" }, { status: 500 });
+    }
 
     return NextResponse.json({
       user: {
@@ -37,6 +40,9 @@ export async function PATCH(request: NextRequest) {
     }
 
     const dbUser = await getOrCreateDbUser(user.id);
+    if (!dbUser) {
+      return NextResponse.json({ error: "Failed to get user" }, { status: 500 });
+    }
 
     const body = await request.json();
     const { preferredProvider, defaultTone, saveRawInputs, enableAnalytics } = body;
@@ -46,7 +52,7 @@ export async function PATCH(request: NextRequest) {
       where: { userId: dbUser.id },
       create: {
         userId: dbUser.id,
-        preferredProvider: preferredProvider || "anthropic",
+        preferredProvider: preferredProvider || "qwen",
         defaultTone: defaultTone || "sincere",
         saveRawInputs: saveRawInputs ?? false,
         enableAnalytics: enableAnalytics ?? true,
