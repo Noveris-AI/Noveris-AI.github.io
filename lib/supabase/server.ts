@@ -63,6 +63,7 @@ export async function getOrCreateDbUser(supabaseUserId: string) {
 
   let user = await prisma.user.findUnique({
     where: { supabaseId: supabaseUserId },
+    include: { preferences: true },
   });
 
   if (!user) {
@@ -85,6 +86,7 @@ export async function getOrCreateDbUser(supabaseUserId: string) {
             },
           },
         },
+        include: { preferences: true },
       });
     }
   }
