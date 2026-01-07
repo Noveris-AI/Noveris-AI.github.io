@@ -1,0 +1,199 @@
+2026-01-07T10:35:31.345Z INFO Is remote: false
+2026-01-07T10:35:31.346Z INFO Starting Local. Installation path: /Users/passion/Documents/Project/To appease one's girlfriend
+2026-01-07T10:35:31.346Z INFO [MainProvider] Creating new MainProvider instance...
+2026-01-07T10:35:31.346Z INFO [TabsManager] Code view listener set up at initialization
+2026-01-07T10:35:31.346Z INFO Installation path exists: /Users/passion/Documents/Project/To appease one's girlfriend
+2026-01-07T10:35:31.346Z INFO Initializing database with URL: file:/Users/passion/Documents/Project/To appease one's girlfriend/pythagora-core/data/database/pythagora.db
+2026-01-07T10:35:31.347Z INFO New database detected, running full prisma setup...
+2026-01-07T10:35:31.347Z INFO [/Users/passion/.vscode/extensions/pythagoratechnologies.pythagora-vs-code-2.6.19] Project root:
+2026-01-07T10:35:31.347Z INFO [/Users/passion/.vscode/extensions/pythagoratechnologies.pythagora-vs-code-2.6.19/prisma/schema.prisma] Schema path:
+2026-01-07T10:35:31.347Z INFO [file:/Users/passion/Documents/Project/To appease one's girlfriend/pythagora-core/data/database/pythagora.db] Database URL:
+2026-01-07T10:35:31.347Z INFO [true] Schema exists:
+2026-01-07T10:35:31.347Z INFO Running prisma generate first...
+2026-01-07T10:35:31.820Z INFO [Prisma schema loaded from prisma/schema.prisma
+
+✔ Generated Prisma Client (6.19.1) to ./src/generated/prisma in 88ms
+
+] Prisma generate result:
+2026-01-07T10:35:31.820Z INFO Running prisma db push to sync schema...
+2026-01-07T10:35:32.276Z INFO [Prisma schema loaded from prisma/schema.prisma
+Datasource "db": SQLite database "pythagora.db" at "file:/Users/passion/Documents/Project/To appease one's girlfriend/pythagora-core/data/database/pythagora.db"
+
+The database is already in sync with the Prisma schema.
+
+Running generate... (Use --skip-generate to skip the generators)
+[2K[1A[2K[GRunning generate... - Prisma Client
+[2K[1A[2K[G✔ Generated Prisma Client (6.19.1) to ./src/generated/prisma in 72ms
+
+] Prisma db push result:
+2026-01-07T10:35:32.276Z INFO Database initialized successfully
+2026-01-07T10:35:32.276Z INFO [Migration] Checking for database migration...
+2026-01-07T10:35:32.298Z INFO [Migration] No migration needed
+2026-01-07T10:35:32.302Z INFO Starting right sidebar creation...
+2026-01-07T10:35:32.302Z INFO Initializing MainProvider...
+2026-01-07T10:35:32.302Z INFO Updating user profile...
+2026-01-07T10:35:32.302Z INFO No access token found when trying to fetch user profile
+2026-01-07T10:35:32.302Z INFO Creating right panel...
+2026-01-07T10:35:32.302Z INFO Creating right panel...
+2026-01-07T10:35:32.302Z INFO Closing all existing tabs...
+2026-01-07T10:35:32.305Z INFO Right panel webview created
+2026-01-07T10:35:32.305Z INFO Right panel HTML set successfully
+2026-01-07T10:35:32.305Z INFO Right panel setup completed
+2026-01-07T10:35:32.306Z INFO Setting up right panel dependencies...
+2026-01-07T10:35:32.306Z INFO [/bin/bash -c pgrep -f "concurrently -n "client,server""] Running command:
+2026-01-07T10:35:32.306Z INFO Right panel dependencies setup complete, waiting for ready signal...
+2026-01-07T10:35:32.309Z ERROR /bin/bash -c pgrep -f "concurrently -n "client,server"" stderr:
+Error: /Users/passion/.bashrc: line 1: /Users/passion/.local/bin/env: No such file or directory
+
+2026-01-07T10:35:32.321Z INFO Command /bin/bash -c pgrep -f "concurrently -n "client,server"" exited with code 1
+2026-01-07T10:35:32.322Z INFO [/bin/bash -c lsof -i :5173 -sTCP:LISTEN -t] Running command:
+2026-01-07T10:35:32.322Z INFO [/bin/bash -c lsof -i :3000 -sTCP:LISTEN -t] Running command:
+2026-01-07T10:35:32.324Z ERROR /bin/bash -c lsof -i :5173 -sTCP:LISTEN -t stderr:
+Error: /Users/passion/.bashrc: line 1: /Users/passion/.local/bin/env: No such file or directory
+
+2026-01-07T10:35:32.325Z ERROR /bin/bash -c lsof -i :3000 -sTCP:LISTEN -t stderr:
+Error: /Users/passion/.bashrc: line 1: /Users/passion/.local/bin/env: No such file or directory
+
+2026-01-07T10:35:32.391Z INFO [17742
+] /bin/bash -c lsof -i :3000 -sTCP:LISTEN -t stdout:
+2026-01-07T10:35:32.391Z INFO Command /bin/bash -c lsof -i :5173 -sTCP:LISTEN -t exited with code 1
+2026-01-07T10:35:32.391Z INFO Command /bin/bash -c lsof -i :3000 -sTCP:LISTEN -t exited with code 0
+2026-01-07T10:35:32.391Z INFO 🔪 ProcessManager: Found PIDs on port 3000: 17742
+2026-01-07T10:35:32.391Z INFO [/bin/bash -c lsof -i :3000 -t | xargs -r kill -9] Running command:
+2026-01-07T10:35:32.394Z ERROR /bin/bash -c lsof -i :3000 -t | xargs -r kill -9 stderr:
+Error: /Users/passion/.bashrc: line 1: /Users/passion/.local/bin/env: No such file or directory
+
+2026-01-07T10:35:32.442Z INFO Command /bin/bash -c lsof -i :3000 -t | xargs -r kill -9 exited with code 0
+2026-01-07T10:35:32.442Z INFO 🔍 ProcessManager: Waiting for port 3000 to be freed...
+2026-01-07T10:35:32.442Z INFO [/bin/bash -c lsof -i :3000 -t] Running command:
+2026-01-07T10:35:32.444Z ERROR /bin/bash -c lsof -i :3000 -t stderr:
+Error: /Users/passion/.bashrc: line 1: /Users/passion/.local/bin/env: No such file or directory
+
+2026-01-07T10:35:32.489Z INFO Command /bin/bash -c lsof -i :3000 -t exited with code 1
+2026-01-07T10:35:32.489Z INFO ✅ ProcessManager: Port 3000 is now free
+2026-01-07T10:35:33.429Z INFO [Message Router] Routing rightPanelReady through unified router
+2026-01-07T10:35:33.447Z INFO [Message Router] Routing rightBarRendered through unified router
+2026-01-07T10:35:33.447Z INFO Right panel setup completed successfully
+2026-01-07T10:35:33.447Z INFO Right panel created via MainProvider
+2026-01-07T10:35:33.447Z INFO Storing initial prompt...
+2026-01-07T10:35:33.447Z INFO Tracing first panel open...
+2026-01-07T10:35:34.206Z INFO Right sidebar setup completed successfully
+2026-01-07T10:35:35.534Z INFO Closing entire Pythagora extension...
+2026-01-07T10:35:35.534Z INFO Right panel disposed, triggering cleanup...
+2026-01-07T10:35:35.534Z INFO Right panel disposed, cleaning up...
+2026-01-07T10:35:35.534Z INFO [Message Router] Routing coreExited through unified router
+2026-01-07T10:35:35.535Z INFO Closing entire Pythagora extension...
+2026-01-07T10:35:35.536Z ERROR Error closing extension
+Error: Canceled
+Stack: Canceled: Canceled
+	at new wU (file:///Applications/Visual%20Studio%20Code.app/Contents/Resources/app/out/vs/workbench/api/node/extensionHostProcess.js:29:120470)
+	at l5.U (file:///Applications/Visual%20Studio%20Code.app/Contents/Resources/app/out/vs/workbench/api/node/extensionHostProcess.js:29:125080)
+	at s.<computed>.n.charCodeAt.s.<computed> (file:///Applications/Visual%20Studio%20Code.app/Contents/Resources/app/out/vs/workbench/api/node/extensionHostProcess.js:29:122574)
+	at cA.g (file:///Applications/Visual%20Studio%20Code.app/Contents/Resources/app/out/vs/workbench/api/node/extensionHostProcess.js:116:41228)
+	at cA.executeCommand (file:///Applications/Visual%20Studio%20Code.app/Contents/Resources/app/out/vs/workbench/api/node/extensionHostProcess.js:116:40732)
+	at Object.executeCommand (file:///Applications/Visual%20Studio%20Code.app/Contents/Resources/app/out/vs/workbench/api/node/extensionHostProcess.js:212:102269)
+	at closeEntirePythagoraExtension (/Users/passion/.vscode/extensions/pythagoratechnologies.pythagora-vs-code-2.6.19/out/extension.js:542:31)
+	at Object.deactivate (/Users/passion/.vscode/extensions/pythagoratechnologies.pythagora-vs-code-2.6.19/out/extension.js:409:15)
+	at HX.eb (file:///Applications/Visual%20Studio%20Code.app/Contents/Resources/app/out/vs/workbench/api/node/extensionHostProcess.js:120:11850)
+	at file:///Applications/Visual%20Studio%20Code.app/Contents/Resources/app/out/vs/workbench/api/node/extensionHostProcess.js:120:10000
+	at Array.map (<anonymous>)
+	at HX.$ (file:///Applications/Visual%20Studio%20Code.app/Contents/Resources/app/out/vs/workbench/api/node/extensionHostProcess.js:120:9988)
+	at HX.terminate (file:///Applications/Visual%20Studio%20Code.app/Contents/Resources/app/out/vs/workbench/api/node/extensionHostProcess.js:120:10231)
+	at yN.terminate (file:///Applications/Visual%20Studio%20Code.app/Contents/Resources/app/out/vs/workbench/api/node/extensionHostProcess.js:122:914)
+	at Us (file:///Applications/Visual%20Studio%20Code.app/Contents/Resources/app/out/vs/workbench/api/node/extensionHostProcess.js:404:11129)
+	at MessagePortMain.<anonymous> (file:///Applications/Visual%20Studio%20Code.app/Contents/Resources/app/out/vs/workbench/api/node/extensionHostProcess.js:404:7604)
+	at MessagePortMain.emit (node:events:519:28)
+	at MessagePortMain._internalPort.emit (node:electron/js2c/utility_init:2:2949)
+Extra context: {
+  "message": "Canceled"
+}
+2026-01-07T10:35:35.542Z ERROR Error closing extension
+Error: Canceled
+Stack: Canceled: Canceled
+	at new wU (file:///Applications/Visual%20Studio%20Code.app/Contents/Resources/app/out/vs/workbench/api/node/extensionHostProcess.js:29:120470)
+	at l5.U (file:///Applications/Visual%20Studio%20Code.app/Contents/Resources/app/out/vs/workbench/api/node/extensionHostProcess.js:29:125080)
+	at s.<computed>.n.charCodeAt.s.<computed> (file:///Applications/Visual%20Studio%20Code.app/Contents/Resources/app/out/vs/workbench/api/node/extensionHostProcess.js:29:122574)
+	at cA.g (file:///Applications/Visual%20Studio%20Code.app/Contents/Resources/app/out/vs/workbench/api/node/extensionHostProcess.js:116:41228)
+	at cA.executeCommand (file:///Applications/Visual%20Studio%20Code.app/Contents/Resources/app/out/vs/workbench/api/node/extensionHostProcess.js:116:40732)
+	at Object.executeCommand (file:///Applications/Visual%20Studio%20Code.app/Contents/Resources/app/out/vs/workbench/api/node/extensionHostProcess.js:212:102269)
+	at closeEntirePythagoraExtension (/Users/passion/.vscode/extensions/pythagoratechnologies.pythagora-vs-code-2.6.19/out/extension.js:542:31)
+	at MainProvider.handleRightPanelDispose (/Users/passion/.vscode/extensions/pythagoratechnologies.pythagora-vs-code-2.6.19/out/providers/MainProvider.js:143:65)
+	at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+	at async _d.value (/Users/passion/.vscode/extensions/pythagoratechnologies.pythagora-vs-code-2.6.19/out/managers/WebviewManager.js:63:17)
+Extra context: {
+  "message": "Canceled"
+}
+2026-01-07T10:35:44.977Z INFO Is remote: false
+2026-01-07T10:35:44.977Z INFO Starting Local. Installation path: /Users/passion/Documents/Project/To appease one's girlfriend
+2026-01-07T10:35:44.977Z INFO [MainProvider] Creating new MainProvider instance...
+2026-01-07T10:35:44.978Z INFO [TabsManager] Code view listener set up at initialization
+2026-01-07T10:35:44.978Z INFO Installation path exists: /Users/passion/Documents/Project/To appease one's girlfriend
+2026-01-07T10:35:44.978Z INFO Initializing database with URL: file:/Users/passion/Documents/Project/To appease one's girlfriend/pythagora-core/data/database/pythagora.db
+2026-01-07T10:35:44.979Z INFO Database file exists, skipping prisma generate/push for faster startup
+2026-01-07T10:35:44.979Z INFO Database initialized successfully
+2026-01-07T10:35:44.979Z INFO [Migration] Checking for database migration...
+2026-01-07T10:35:44.994Z INFO [Migration] No migration needed
+2026-01-07T10:35:44.995Z INFO Starting right sidebar creation...
+2026-01-07T10:35:44.995Z INFO Initializing MainProvider...
+2026-01-07T10:35:44.995Z INFO Updating user profile...
+2026-01-07T10:35:44.996Z INFO No access token found when trying to fetch user profile
+2026-01-07T10:35:44.996Z INFO Creating right panel...
+2026-01-07T10:35:44.996Z INFO Creating right panel...
+2026-01-07T10:35:44.996Z INFO Closing all existing tabs...
+2026-01-07T10:35:44.999Z INFO Right panel webview created
+2026-01-07T10:35:44.999Z INFO Right panel HTML set successfully
+2026-01-07T10:35:44.999Z INFO Right panel setup completed
+2026-01-07T10:35:45.000Z INFO Setting up right panel dependencies...
+2026-01-07T10:35:45.000Z INFO [/bin/bash -c pgrep -f "concurrently -n "client,server""] Running command:
+2026-01-07T10:35:45.001Z INFO Right panel dependencies setup complete, waiting for ready signal...
+2026-01-07T10:35:45.003Z ERROR /bin/bash -c pgrep -f "concurrently -n "client,server"" stderr:
+Error: /Users/passion/.bashrc: line 1: /Users/passion/.local/bin/env: No such file or directory
+
+2026-01-07T10:35:45.016Z INFO Command /bin/bash -c pgrep -f "concurrently -n "client,server"" exited with code 1
+2026-01-07T10:35:45.016Z INFO [/bin/bash -c lsof -i :5173 -sTCP:LISTEN -t] Running command:
+2026-01-07T10:35:45.016Z INFO [/bin/bash -c lsof -i :3000 -sTCP:LISTEN -t] Running command:
+2026-01-07T10:35:45.019Z ERROR /bin/bash -c lsof -i :5173 -sTCP:LISTEN -t stderr:
+Error: /Users/passion/.bashrc: line 1: /Users/passion/.local/bin/env: No such file or directory
+
+2026-01-07T10:35:45.019Z ERROR /bin/bash -c lsof -i :3000 -sTCP:LISTEN -t stderr:
+Error: /Users/passion/.bashrc: line 1: /Users/passion/.local/bin/env: No such file or directory
+
+2026-01-07T10:35:45.077Z INFO Command /bin/bash -c lsof -i :5173 -sTCP:LISTEN -t exited with code 1
+2026-01-07T10:35:45.077Z INFO Command /bin/bash -c lsof -i :3000 -sTCP:LISTEN -t exited with code 1
+2026-01-07T10:35:45.336Z INFO [Message Router] Routing rightPanelReady through unified router
+2026-01-07T10:35:45.352Z INFO [Message Router] Routing rightBarRendered through unified router
+2026-01-07T10:35:45.352Z INFO Right panel setup completed successfully
+2026-01-07T10:35:45.352Z INFO Right panel created via MainProvider
+2026-01-07T10:35:45.352Z INFO Storing initial prompt...
+2026-01-07T10:35:45.352Z INFO Tracing first panel open...
+2026-01-07T10:35:45.353Z INFO Right sidebar setup completed successfully
+2026-01-07T10:35:49.693Z INFO Right panel disposed, triggering cleanup...
+2026-01-07T10:35:49.694Z INFO Right panel disposed, cleaning up...
+2026-01-07T10:35:49.694Z INFO [Message Router] Routing coreExited through unified router
+2026-01-07T10:35:49.694Z INFO Closing entire Pythagora extension...
+2026-01-07T10:35:49.710Z INFO Pythagora extension closed
+2026-01-07T10:36:03.594Z INFO Closing entire Pythagora extension...
+2026-01-07T10:36:03.595Z ERROR Error closing extension
+Error: Canceled
+Stack: Canceled: Canceled
+	at new wU (file:///Applications/Visual%20Studio%20Code.app/Contents/Resources/app/out/vs/workbench/api/node/extensionHostProcess.js:29:120470)
+	at l5.U (file:///Applications/Visual%20Studio%20Code.app/Contents/Resources/app/out/vs/workbench/api/node/extensionHostProcess.js:29:125080)
+	at s.<computed>.n.charCodeAt.s.<computed> (file:///Applications/Visual%20Studio%20Code.app/Contents/Resources/app/out/vs/workbench/api/node/extensionHostProcess.js:29:122574)
+	at cA.g (file:///Applications/Visual%20Studio%20Code.app/Contents/Resources/app/out/vs/workbench/api/node/extensionHostProcess.js:116:41228)
+	at cA.executeCommand (file:///Applications/Visual%20Studio%20Code.app/Contents/Resources/app/out/vs/workbench/api/node/extensionHostProcess.js:116:40732)
+	at Object.executeCommand (file:///Applications/Visual%20Studio%20Code.app/Contents/Resources/app/out/vs/workbench/api/node/extensionHostProcess.js:212:102269)
+	at closeEntirePythagoraExtension (/Users/passion/.vscode/extensions/pythagoratechnologies.pythagora-vs-code-2.6.19/out/extension.js:542:31)
+	at Object.deactivate (/Users/passion/.vscode/extensions/pythagoratechnologies.pythagora-vs-code-2.6.19/out/extension.js:409:15)
+	at HX.eb (file:///Applications/Visual%20Studio%20Code.app/Contents/Resources/app/out/vs/workbench/api/node/extensionHostProcess.js:120:11850)
+	at file:///Applications/Visual%20Studio%20Code.app/Contents/Resources/app/out/vs/workbench/api/node/extensionHostProcess.js:120:10000
+	at Array.map (<anonymous>)
+	at HX.$ (file:///Applications/Visual%20Studio%20Code.app/Contents/Resources/app/out/vs/workbench/api/node/extensionHostProcess.js:120:9988)
+	at HX.terminate (file:///Applications/Visual%20Studio%20Code.app/Contents/Resources/app/out/vs/workbench/api/node/extensionHostProcess.js:120:10231)
+	at yN.terminate (file:///Applications/Visual%20Studio%20Code.app/Contents/Resources/app/out/vs/workbench/api/node/extensionHostProcess.js:122:914)
+	at Us (file:///Applications/Visual%20Studio%20Code.app/Contents/Resources/app/out/vs/workbench/api/node/extensionHostProcess.js:404:11129)
+	at MessagePortMain.<anonymous> (file:///Applications/Visual%20Studio%20Code.app/Contents/Resources/app/out/vs/workbench/api/node/extensionHostProcess.js:404:7604)
+	at MessagePortMain.emit (node:events:519:28)
+	at MessagePortMain._internalPort.emit (node:electron/js2c/utility_init:2:2949)
+Extra context: {
+  "message": "Canceled"
+}

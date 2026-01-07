@@ -3,7 +3,6 @@
  * Orchestrates LLM calls with safety checks and output validation
  */
 
-import { anthropic } from "@ai-sdk/anthropic";
 import { openai, createOpenAI } from "@ai-sdk/openai";
 import { streamText, generateText } from "ai";
 import { RepairPlanSchema, type RepairPlan, type CreateCaseInput } from "./schemas";
@@ -24,14 +23,8 @@ const TIMEOUT_MS = 60000; // 60 seconds
 /**
  * Get AI provider based on configuration
  */
-function getAIProvider(provider: string = "anthropic") {
+function getAIProvider(provider: string = "qwen") {
   switch (provider) {
-    case "anthropic":
-      if (!process.env.ANTHROPIC_API_KEY) {
-        throw new Error("ANTHROPIC_API_KEY not configured");
-      }
-      return anthropic("claude-3-5-sonnet-20241022");
-
     case "openai":
       if (!process.env.OPENAI_API_KEY) {
         throw new Error("OPENAI_API_KEY not configured");
@@ -58,10 +51,10 @@ function getAIProvider(provider: string = "anthropic") {
         });
         return qwenClient("qwen-max");
       }
-      if (process.env.ANTHROPIC_API_KEY) {
-        return anthropic("claude-3-5-sonnet-20241022");
+      if (process.env.OPENAI_API_KEY) {
+        return openai("gpt-4o");
       }
-      throw new Error("No AI provider API key configured. Please set QWEN_API_KEY, ANTHROPIC_API_KEY, or OPENAI_API_KEY");
+      throw new Error("No AI provider API key configured. Please set QWEN_API_KEY or OPENAI_API_KEY");
   }
 }
 
